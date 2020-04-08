@@ -45,10 +45,6 @@ def set_parameters(set_name, golden_set, input_file):
     
     #-------------------------------------------------------------------------
     
-    
-    # Ignore the deprecated warnings
-    warnings.filterwarnings("ignore", category=DeprecationWarning)
-    
     #read in the directory that is being run
     data_dir = set_name
     
@@ -189,7 +185,6 @@ def set_parameters(set_name, golden_set, input_file):
         precision_score_train.append(precision_score)
         cfm += metric_score
         
-        # DEPRECATED AND NEEDS TO BE CHANGED!!!!******
         df.loc[df_predict.index, 'Sampled']   += np.ones(len(df_predict.index))
         df.loc[df_predict.index, 'Predicted'] += alg.predict(df_predict[features])
         df.loc[df_predict.index, 'Prob']       = alg.predict(df_predict[features])
