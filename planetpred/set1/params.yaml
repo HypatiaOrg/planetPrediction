@@ -6,4 +6,4 @@ gas_giant_mass:        0.0945
 
 features: ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y1', 'Cr', 'Co', 'Ni', 'Fe']
 
-dropnans: False
+dropnans: True
