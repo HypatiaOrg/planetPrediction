@@ -19,7 +19,7 @@ def plot_parameters(set_name):
     parameters = yaml.load(stream, Loader=yaml.FullLoader)
     features = parameters['features']
     
-    df = pd.read_csv('hypatia-nonCons-noThickDisk-planets-28Feb-nasa.csv')
+    df = pd.read_csv('main.csv')
     results = pd.read_pickle('{0}/df_info_all.pkl'.format(set_name))
     
     data = pd.read_pickle('{0}/features_train.pkl'.format(set_name))

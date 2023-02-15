@@ -1,6 +1,7 @@
 #
 # Run from the main hypatia/ directory.
 # Remember to change which set it is being run out of.
+# Line 68 update to the file I'm using. -ARTQ, 02/09/2023
 
 import numpy as np
 import os
@@ -33,9 +34,9 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     
     #------------------------Input Changes-----------------------------------------
     
-    
+    # If folder name is set(number), it looks for the following elements. Copy the ones I want.
     if (set_name=="set5"):
-        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y1']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y1', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set4":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y1', 'Fe']
     elif (set_name=="set3"):
@@ -64,7 +65,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     
     #--------------------------------Running the Numbers---------------------------------
     
-    hyp = ClassyReader("hypatia-nonCons-noThickDisk-planets-28Feb-nasa.csv", delimiter=",")
+    hyp = ClassyReader("main.csv", delimiter=",")
     predicted = ClassyReader(set_name+"/figures/planet_probabilities_big.csv", delimiter=",")
 
     element_dict = {}
@@ -143,6 +144,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     
         histPredFe = np.histogram(predFe,bins=binsx)
         normPredFe = []
+
         for num in histPredFe[0]:
             normPredFe.append(float(num)/float(max(histPredFe[0])))
     
