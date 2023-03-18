@@ -27,6 +27,7 @@ exo_data_keys = all_exo.requested_data_types
 combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys
 
 cutoff_mass = 0.095
+ptic_id = ''
 
 class NoPlanet:
     def __init__(self):
@@ -39,6 +40,17 @@ class NoPlanet:
         def __init__(self):
             self.planet_params = 'nan'
             self.exo_key = 'nan'
+
+# put all the data in one combined dictionary
+def combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict):
+
+    combined_data_dict = {'star_name': star_name, 'planet_letters': planet_letter} |\
+                         hypatia_data_dict | planet_data_dict
+    # convert the combined data dictionary to a list of strings, in the order of the combined data keys
+    write_values = [str(combined_data_dict[key]) for key in combined_data_keys]
+    # write the data to the combined data CSV file
+    combined_data_file.write(",".join(write_values) + "\n")
+    return
 
 # start writing the combined data CSV file
 with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_data_file:
@@ -54,6 +66,7 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
         hypatia_data_dict = {column_name: data_value for column_name, data_value in zip(hypatia_data_keys, data_tuple)}
         
         if exo_data_this_star is None:
+            # count+=1
             # no exoplanet data for this star, so we skip these rows from the combined data CSV file
             exo_data_this_star = NoPlanet().PlanetLetters()
             exo_planet = NoPlanet().PlanetParams()
@@ -67,31 +80,25 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
             planet_letter = ''
 
             # put all the data in one combined dictionary
-            combined_data_dict = {'star_name': star_name, 'planet_letters': planet_letter} |\
-                                 hypatia_data_dict | planet_data_dict
-            # convert the combined data dictionary to a list of strings, in the order of the combined data keys
-            write_values = [str(combined_data_dict[key]) for key in combined_data_keys]
-            # write the data to the combined data CSV file
-            combined_data_file.write(",".join(write_values) + "\n")
-        else:    
-        # iterate over all the planets for this star
+            combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+        else:
             for planet_letter in sorted(exo_data_this_star.planet_letters):
                 count += 1
                 # get the exoplanet data for this planet
                 exo_planet = exo_data_this_star.__getattribute__(planet_letter)
 
-                if ((hasattr(exo_planet,'pl_bmassj') == False) or (exo_planet.pl_bmassj < cutoff_mass)):
-                    continue
                 # make a dictionary of exoplanet data for this planet
                 planet_data_dict = {
                     exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
                     for exo_key in exo_data_keys
                 }
-
-                # put all the data in one combined dictionary
-                combined_data_dict = {'star_name': star_name, 'planet_letters': planet_letter} |\
-                                     hypatia_data_dict | planet_data_dict
-                # convert the combined data dictionary to a list of strings, in the order of the combined data keys
-                write_values = [str(combined_data_dict[key]) for key in combined_data_keys]
-                # write the data to the combined data CSV file
-                combined_data_file.write(",".join(write_values) + "\n")
+                if(hasattr(exo_planet,'pl_bmassj')==False):
+                    continue
+                elif(exo_planet.pl_bmassj < cutoff_mass):
+                    continue
+                elif(ptic_id == exo_planet.tic_id):
+                    continue
+                else:                
+                    # put all the data in one combined dictionary
+                    combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+                    ptic_id = exo_planet.tic_id
