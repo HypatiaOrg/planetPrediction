@@ -6,7 +6,6 @@ from autostar.exo_archive import AllExoPlanets
 
 from ref.ref import base_dir
 
-
 # user options
 refresh_data = False  # if True, will refresh the data from the internet, False will use the local data
 verbose = True  # if True, will print out the progress of the code
@@ -28,6 +27,7 @@ combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_d
 
 cutoff_mass = 0.095
 ptic_id = ''
+previous_mass = 0
 
 class NoPlanet:
     def __init__(self):
@@ -66,7 +66,7 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
         hypatia_data_dict = {column_name: data_value for column_name, data_value in zip(hypatia_data_keys, data_tuple)}
         
         if exo_data_this_star is None:
-            # count+=1
+            count+=1
             # no exoplanet data for this star, so we skip these rows from the combined data CSV file
             exo_data_this_star = NoPlanet().PlanetLetters()
             exo_planet = NoPlanet().PlanetParams()
@@ -77,11 +77,13 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
                 for exo_key in exo_data_keys
             }
 
-            planet_letter = ''
+            planet_letter = str()
 
             # put all the data in one combined dictionary
             combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+            
         else:
+            true_letter = str(list(exo_data_this_star.planet_letters)[0])
             for planet_letter in sorted(exo_data_this_star.planet_letters):
                 count += 1
                 # get the exoplanet data for this planet
@@ -92,13 +94,21 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
                     exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
                     for exo_key in exo_data_keys
                 }
+                # Verify if the planet has a recorded mass
                 if(hasattr(exo_planet,'pl_bmassj')==False):
                     continue
+                # Verify if the planet's mass is less than the cutoff mass.
                 elif(exo_planet.pl_bmassj < cutoff_mass):
                     continue
+                # Verify if the planet orbits the same star as the previous.
                 elif(ptic_id == exo_planet.tic_id):
-                    continue
-                else:                
-                    # put all the data in one combined dictionary
-                    combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+                    # If it does, check if the current planets mass is larger than the previous
+                    if(exo_planet.pl_bmassj > previous_mass):
+                        previous_mass = exo_planet.pl_bmassj
+                        true_letter = planet_letter
+                else:
+                    combine_data(star_name, true_letter, hypatia_data_dict, planet_data_dict)
+                    # Reset variables to default values
                     ptic_id = exo_planet.tic_id
+                    previous_mass = 0
+                    true_letter = str(list(exo_data_this_star.planet_letters)[0])
