@@ -1,0 +1,16 @@
+reference_data_dir = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference"
+sb_bad_star_name_ignore_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\bad_starname_ignore.csv"
+sb_main_ref_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\simbad_main_ref_data.csv"
+sb_save_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\simbad_query_data.pkl"
+sb_save_coord_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\simbad_coord_data.pkl"
+sb_ref_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\simbad_ref_data.txt"
+tic_ref_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\tic_ref.csv"
+annoying_names_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\annoying_names.csv"
+popular_names_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\popular_names.csv"
+exoplanet_archive_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\nasaexoplanets.csv"
+name_correction_filename = "C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\planetpred\\reference\\name_correction.psv"
+sb_desired_names = [ "k2", "name", "ids", "xo", "*", "kepler", "gaia dr2", "tres", "v*", "gaia dr3", "tyc", "2mass", "ogle", "wds", "gaia dr1", "hd", "hip", "bd", "bps", "cd", "ngc", "gv", "**", "hats", "hr", "gj",]
+nea_exo_star_name_columns = [ "hip_name", "hostname", "hd_name",]
+nea_might_be_zero = [ "pl_letter", "pl_orbincl", "pl_orbeccen", "hostname", "discoverymethod", "pl_pnum",]
+nea_unphysical_if_zero_params = [ "pl_radjerr1", "pl_orbinclerr1", "pl_radjerr2", "pl_bmassjerr1", "pl_bmassj", "st_mass", "pl_orbsmax", "st_rad", "pl_bmassjerr2", "pl_orbsmaxerr1", "st_masserr1", "pl_orbinclerr2", "sy_dist", "st_raderr2", "st_raderr1", "pl_orbeccenerr1", "pl_radj", "st_masserr2", "pl_orbeccenerr2", "pl_orbsmaxerr2",]
+nea_requested_data_types_default = [ "hostname", "pl_letter", "gaia_id", "tic_id", "discoverymethod", "pl_orbper", "pl_orbpererr1", "pl_orbpererr2", "pl_orbsmax", "pl_orbsmaxerr1", "pl_orbsmaxerr2", "pl_orbeccen", "pl_orbeccenerr1", "pl_orbeccenerr2", "pl_orbincl", "pl_orbinclerr1", "pl_orbinclerr2", "pl_bmassj", "pl_bmassjerr1", "pl_bmassjerr2", "pl_radj", "pl_radjerr1", "pl_radjerr2", "pl_ratdor",]

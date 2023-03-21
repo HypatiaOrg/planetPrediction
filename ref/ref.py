@@ -82,6 +82,7 @@ nea_unphysical_if_zero_params = {
 nea_requested_data_types_default = [
     "hostname",
     "pl_letter",
+    "sy_pnum",
     "gaia_id",
     'tic_id',
     "discoverymethod",

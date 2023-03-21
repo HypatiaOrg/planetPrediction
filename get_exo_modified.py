@@ -7,7 +7,7 @@ from autostar.exo_archive import AllExoPlanets
 from ref.ref import base_dir
 
 # user options
-refresh_data = False  # if True, will refresh the data from the internet, False will use the local data
+refresh_data = True  # if True, will refresh the data from the internet, False will use the local data
 verbose = True  # if True, will print out the progress of the code
 hypatia_data_path = os.path.join(base_dir, "hypatia.csv") # path to the local copy of the Hypatia data
 
