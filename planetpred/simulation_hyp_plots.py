@@ -36,15 +36,15 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     
     # If folder name is set(number), it looks for the following elements. Copy the ones I want.
     if (set_name=="set5"):
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y1', 'Cr', 'Co', 'Ni', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set4":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y1', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Fe']
     elif (set_name=="set3"):
-        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y1', 'Fe']
+        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y', 'Fe']
     elif set_name=="set2":
-        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y1', 'C', 'O']
+        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y', 'C', 'O']
     elif set_name=="set1":
-        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y1', 'C', 'O', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set6":
         elements = ['C', 'O', 'Fe']
     else:
@@ -225,12 +225,12 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         axScatter.set_xlabel("[Fe/H]", fontsize=15)
     
         if plotXFe:
-            if n=="Y1":
+            if n=="Y":
                 axScatter.set_ylabel("[Y/Fe]", fontsize=15)
             else:
                 axScatter.set_ylabel("["+n+"/Fe]", fontsize=15)
         else:
-            if n=="Y1":
+            if n=="Y":
                 axScatter.set_ylabel("[Y/H]", fontsize=15)
             else:
                 axScatter.set_ylabel("["+n+"/H]", fontsize=15)

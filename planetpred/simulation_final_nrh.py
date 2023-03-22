@@ -64,11 +64,11 @@ def set_parameters(set_name, golden_set, input_file):
     # Make a golden set if True. Then select 10 random confirmed exoplanet host stars as the golden.
     if golden:
         df2 = df.copy()
-        df2.loc[df2[(df2['Exo']==1) & (df2['MaxPMass']>parameters['gas_giant_mass'])].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
+        df2.loc[df2[(df2['Exo']==1) & (df2['pl_bmassj']>parameters['gas_giant_mass'])].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
         yy = df2.loc[df2['Exo'] == 0].index
         zz = df.loc[df['Exo'] == 0].index
         changed = [ind for ind in yy if not ind in zz]
-        changedhips = [df['HIP'][ind] for ind in changed]
+        changedhips = [df['star_name'][ind] for ind in changed]
         df = df2.copy()
         yy2 = df2.loc[df2['Exo'] == 0].index
         zz2 = df.loc[df['Exo'] == 0].index
@@ -83,15 +83,15 @@ def set_parameters(set_name, golden_set, input_file):
 ##    print(max_value)
 ##    input()
     
-    df.index        = df['HIP']
+    df.index        = df['star_name']
     #df['Star Catalogue'] = df['Star Catalogue'].astype('category')
     #df['Star Id'] = df['Star Id'].astype('category')
     df['Exo']       = df['Exo'].astype('category') #category = limited possibilities
-    df['Multi']     = df['Multi'].astype('category')
-    df['MaxPMass']  = df['MaxPMass'].astype(np.number)
+    df['Multi']     = df['sy_pnum'].astype('category')
+    df['MaxPMass']  = df['pl_bmassj'].astype(np.number)
     df['Sampled']   = np.zeros((df.shape[0]))
     df['Predicted'] = np.zeros((df.shape[0]))
-    df = df.drop(['HIP'], 1)
+    df = df.drop(['star_name'], 1)
 
     # Print a bunch of stuff in terminal
     print('Parameters used in simulation:')
@@ -108,7 +108,7 @@ def set_parameters(set_name, golden_set, input_file):
     gas_giant_mass = parameters['gas_giant_mass']
     features = parameters['features']
     
-    relevant_columns = features + ['Exo', 'MaxPMass', 'Sampled', 'Predicted']
+    relevant_columns = features + ['Exo', 'pl_bmassj', 'Sampled', 'Predicted']
 
     #Redefine dataframe with the "relevant columns" and remove nans if dropnans==True in yaml
     if(parameters['dropnans']):
@@ -138,7 +138,7 @@ def set_parameters(set_name, golden_set, input_file):
         #print(df['MaxPMass']>gas_giant_mass)
         #input()
         #dataframe of 200 random hosts with giant planets
-        df_iter_with_exo = df[(df['Exo']==1) & (df['MaxPMass']>gas_giant_mass)].sample(N_samples, random_state=np.random.RandomState())
+        df_iter_with_exo = df[(df['Exo']==1) & (df['pl_bmassj']>gas_giant_mass)].sample(N_samples, random_state=np.random.RandomState())
 
         #dataframe of 200 random non hosts
         df_iter_none_exo = df[df['Exo']==0].sample(N_samples, random_state=np.random.RandomState())
@@ -176,7 +176,8 @@ def set_parameters(set_name, golden_set, input_file):
         xgtrain = xgb.DMatrix(X[features].values, label=Y)
         
         #cross validation (CV) of xgboost to avoid overfitting
-        cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'], nfold=cv_folds, metrics='auc', early_stopping_rounds=early_stopping_rounds)
+        cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'],
+                          nfold=cv_folds, metrics='auc', early_stopping_rounds=early_stopping_rounds)
         
         alg.set_params(n_estimators=cvresult.shape[0])
         print(iteration, '\t \t', cvresult.shape[0])

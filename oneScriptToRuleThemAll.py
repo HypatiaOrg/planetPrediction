@@ -17,8 +17,8 @@ input_file_name = File that has abundances and whether a star is an exoplanet ho
 '''
 
 #file_name = "simulation_final_nrh.py"
-setname = "set5"
-goldenYN = "True"
+setname = "set1"
+goldenYN = "False"
 XFeYN = "True"
 plotYN = "True"
 input_file_name = "main.csv"
