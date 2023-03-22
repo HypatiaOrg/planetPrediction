@@ -7,7 +7,7 @@ from autostar.exo_archive import AllExoPlanets
 from ref.ref import base_dir
 
 # user options
-refresh_data = True  # if True, will refresh the data from the internet, False will use the local data
+refresh_data = False  # if True, will refresh the data from the internet, False will use the local data
 verbose = True  # if True, will print out the progress of the code
 hypatia_data_path = os.path.join(base_dir, "hypatia.csv") # path to the local copy of the Hypatia data
 
@@ -53,7 +53,7 @@ def combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict):
     return
 
 # start writing the combined data CSV file
-with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_data_file:
+with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
     # write the CSV file header
     combined_data_file.write(",".join(combined_data_keys) + "\n")
     # iterate ove all the stars in the Hypatia data
@@ -83,7 +83,8 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
             combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
             
         else:
-            true_letter = str(list(exo_data_this_star.planet_letters)[0])
+            test_count = 0
+            true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
             for planet_letter in sorted(exo_data_this_star.planet_letters):
                 count += 1
                 # get the exoplanet data for this planet
@@ -100,15 +101,28 @@ with open(os.path.join(base_dir, "combined_data_test.csv"), "w") as combined_dat
                 # Verify if the planet's mass is less than the cutoff mass.
                 elif(exo_planet.pl_bmassj < cutoff_mass):
                     continue
+                # It's writing the first entry first due to if/else position.
                 # Verify if the planet orbits the same star as the previous.
-                elif(ptic_id == exo_planet.tic_id):
+                elif(len(exo_data_this_star.planet_letters) > 1):
+                    test_count += 1
                     # If it does, check if the current planets mass is larger than the previous
                     if(exo_planet.pl_bmassj > previous_mass):
                         previous_mass = exo_planet.pl_bmassj
                         true_letter = planet_letter
-                else:
+                        #print(star_name, planet_letter, 'Im here')
+                        #input()
+                if (test_count == len(exo_data_this_star.planet_letters)):
                     combine_data(star_name, true_letter, hypatia_data_dict, planet_data_dict)
+
                     # Reset variables to default values
                     ptic_id = exo_planet.tic_id
                     previous_mass = 0
-                    true_letter = str(list(exo_data_this_star.planet_letters)[0])
+                    test_count = 0
+                    true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
+                elif (test_count == 0):
+                    combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+                    
+                    # Reset variables to default values                    
+                    ptic_id = exo_planet.tic_id
+                    previous_mass = 0
+                    true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
