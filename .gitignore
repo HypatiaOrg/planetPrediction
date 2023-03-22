@@ -6,6 +6,9 @@ api.py
 csv
 *old_sets/
 *old_csv/
+*planetpred/backup_scripts
+*planetpred/reference/backup
+
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml
 
