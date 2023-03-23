@@ -23,7 +23,7 @@ all_exo = AllExoPlanets(refresh_data=refresh_data, verbose=verbose)
 exo_data_keys = all_exo.requested_data_types
 
 # to make the header of the combined data CSV file
-combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys
+combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['Exo']
 
 cutoff_mass = 0.095
 ptic_id = ''
@@ -77,6 +77,8 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                 for exo_key in exo_data_keys
             }
 
+            planet_data_dict['Exo'] = 0
+
             planet_letter = str()
 
             # put all the data in one combined dictionary
@@ -112,6 +114,7 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                         #print(star_name, planet_letter, 'Im here')
                         #input()
                 if (test_count == len(exo_data_this_star.planet_letters)):
+                    planet_data_dict['Exo'] = 1
                     combine_data(star_name, true_letter, hypatia_data_dict, planet_data_dict)
 
                     # Reset variables to default values
@@ -120,6 +123,7 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                     test_count = 0
                     true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
                 elif (test_count == 0):
+                    planet_data_dict['Exo'] = 1
                     combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
                     
                     # Reset variables to default values                    
