@@ -90,8 +90,8 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         exoFe = []
         otherFe = []
 
-        for zz, star in enumerate(hyp.HIP):
-            if star in predicted.HIP:
+        for zz, star in enumerate(hyp.star_name):
+            if star in predicted.star_name:
                 predFe.append(hyp.Fe[zz])
                 if plotXFe:
                     # vars()[temp1].append(hyp[n][zz]-hyp.Fe[zz])
@@ -277,6 +277,6 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     # Make sure that there are no known hosts in the predicted hosts: aa == 0
     #aa = []
     #for ii in range(len(hyp)):
-    #    for star in predicted.HIP:
-    #        if hyp.HIP[ii]==star:
+    #    for star in predicted.star_name:
+    #        if hyp.star_name[ii]==star:
     #            aa.append(hyp.Exo[ii])

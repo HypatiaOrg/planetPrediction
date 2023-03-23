@@ -58,43 +58,31 @@ def set_parameters(set_name, golden_set, input_file):
     df  = pd.read_csv(input_file)
     
     set_number = set_name
-
-##    print(type(df['sy_pnum'][0]),df['sy_pnum'][0], float('nan'))
-##    input()
+    
     #-------------------------------------------------------------------------
     
     # Make a golden set if True. Then select 10 random confirmed exoplanet host stars as the golden.
     if golden:
         df2 = df.copy()
-        df2.loc[df2[(df2['sy_pnum']>=1) & (df2['pl_bmassj']>parameters['gas_giant_mass'])].sample(10, random_state=np.random.RandomState()).index,'sy_pnum'] = 0
-        yy = df2.loc[df2['sy_pnum'] == float('nan')].index
-        zz = df.loc[df['sy_pnum'] == float('nan')].index
+        df2.loc[df2[(df2['Exo']==1) & (df2['pl_bmassj']>parameters['gas_giant_mass'])].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
+        yy = df2.loc[df2['Exo'] == 0].index
+        zz = df.loc[df['Exo'] == 0].index
         changed = [ind for ind in yy if not ind in zz]
         changedhips = [df['star_name'][ind] for ind in changed]
         df = df2.copy()
-        yy2 = df2.loc[df2['sy_pnum'] == float('nan')].index
-        zz2 = df.loc[df['sy_pnum'] == float('nan')].index
+        yy2 = df2.loc[df2['Exo'] == 0].index
+        zz2 = df.loc[df['Exo'] == 0].index
         changed2 = [ind for ind in yy2 if not ind in zz2]
     #-------------------------------------------------------------------------
-
-##    print(df['Star_Name'][8],len(df['Star_Name'][8]),len(df['Star_Name'][2]))
-##    max_value = 0
-##    for i in range(len(df['Star_Name'])):
-##        if len(df['Star_Name'][i])>max_value:
-##            max_value=len(df['Star_Name'][i])
-##    print(max_value)
-##    input()
     
     df.index        = df['star_name']
-    #df['Star Catalogue'] = df['Star Catalogue'].astype('category')
-    #df['Star Id'] = df['Star Id'].astype('category')
-##    df['Exo']       = df['Exo'].astype('category') #category = limited possibilities
-    df['Multi']     = df['sy_pnum'].astype('category')
-    df['MaxPMass']  = df['pl_bmassj'].astype(np.number)
+    df['Exo']       = df['Exo'].astype('category') #category = limited possibilities
+    df['sy_pnum']     = df['sy_pnum'].astype('category')
+    df['pl_bmassj']  = df['pl_bmassj'].astype(np.number)
     df['Sampled']   = np.zeros((df.shape[0]))
     df['Predicted'] = np.zeros((df.shape[0]))
     df = df.drop(['star_name'], 1)
-
+    
     # Print a bunch of stuff in terminal
     print('Parameters used in simulation:')
     print('------------------------------')
@@ -110,16 +98,19 @@ def set_parameters(set_name, golden_set, input_file):
     gas_giant_mass = parameters['gas_giant_mass']
     features = parameters['features']
     
-    relevant_columns = features + ['sy_pnum', 'pl_bmassj', 'Sampled', 'Predicted']
+    relevant_columns = features + ['Exo', 'pl_bmassj', 'Sampled', 'Predicted']
 
     #Redefine dataframe with the "relevant columns" and remove nans if dropnans==True in yaml
     if(parameters['dropnans']):
         df = df[relevant_columns].dropna()
+##    print(df)
+##    input()
+
+    #print(df[(df['Exo']==1) & (df['pl_bmassj']>gas_giant_mass)])
     
     print('Number of samples used in simulation: {0}'.format(df.shape[0]))
     
     print('')
-
     #Define the confusion matrix and other arrays
     cfm = np.zeros((2,2))
     
@@ -136,28 +127,21 @@ def set_parameters(set_name, golden_set, input_file):
     # Loop for all of the iterations (defined in yaml)
     for iteration in range(0, N_iterations):
 
-        #print(df['Exo'])
-        #print(df['MaxPMass']>gas_giant_mass)
-        #input()
         #dataframe of 200 random hosts with giant planets
-        df_iter_with_exo = df[(df['sy_pnum']>=1) & (df['pl_bmassj']>gas_giant_mass)].sample(N_samples, random_state=np.random.RandomState())
-
+        df_iter_with_exo = df[(df['Exo']==1) & (df['pl_bmassj']>gas_giant_mass)].sample(N_samples, random_state=np.random.RandomState())
         #dataframe of 200 random non hosts
-        df_iter_none_exo = df[df['sy_pnum']==float('nan')].sample(N_samples, random_state=np.random.RandomState())
-        #print(df_iter_with_exo)
-        #print(df_iter_none_exo)
-        #input()
+        df_iter_none_exo = df[df['Exo']==0].sample(N_samples, random_state=np.random.RandomState())
+        
         # make a new dataframe of the 400 star subset
         df_train         = pd.concat([df_iter_with_exo, df_iter_none_exo], axis=0)
         # make a dataframe of those stars NOT in the training set (to predict on)
         df_predict       = df[~df.index.isin(df_train.index)]
-        #print(df_train)
         
         # The train dataframe with everything but the Exo column
-        X = df_train.drop(['sy_pnum'],1)
+        X = df_train.drop(['Exo'],1)
         # The Exo column (and hips)
-        Y = df_train.sy_pnum
-
+        Y = df_train.Exo
+        
         # Note: Using gbtree booster
         alg = XGBClassifier(learning_rate =0.1, #def=0.3, prevents overfitting and makes feature weight conservative
                             n_estimators=1000, #number of boosted trees to fit
@@ -178,8 +162,7 @@ def set_parameters(set_name, golden_set, input_file):
         xgtrain = xgb.DMatrix(X[features].values, label=Y)
         
         #cross validation (CV) of xgboost to avoid overfitting
-        cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'],
-                          nfold=cv_folds, metrics='auc', early_stopping_rounds=early_stopping_rounds)
+        cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'], nfold=cv_folds, metrics='auc', early_stopping_rounds=early_stopping_rounds)
         
         alg.set_params(n_estimators=cvresult.shape[0])
         print(iteration, '\t \t', cvresult.shape[0])
@@ -204,8 +187,10 @@ def set_parameters(set_name, golden_set, input_file):
         auc_score_train.append(auc_score)
         precision_score_train.append(precision_score)
         cfm += metric_score
-        
-        df.loc[df_predict.index, 'Sampled']   += np.ones(len(df_predict.index))      
+
+        #2MASS I is a duplicated index in the main.csv sheet, keep one of the entries?
+        #Array lengths not matching up
+        df.loc[df_predict.index, 'Sampled']   += np.ones(len(df_predict.index))
         df.loc[df_predict.index, 'Predicted'] += alg.predict(df_predict[features])
         df.loc[df_predict.index, 'Prob']       = alg.predict(df_predict[features])
         
@@ -230,7 +215,7 @@ def set_parameters(set_name, golden_set, input_file):
     ###########-------------------Output List of Planets------------------------#########
     
     #Find the stars with >90% probability of hosting a planet, with the Sampled, Predicted, and Prob columns
-    planets = df[(df.Prob>.90) & (df.sy_pnum==float('nan'))][['Sampled', 'Predicted', 'Prob']]
+    planets = df[(df.Prob>.90) & (df.Exo==0)][['Sampled', 'Predicted', 'Prob']]
     print('Number of most probable planet hosts: {0}'.format(planets.shape[0]))
     
     #Sort the stars with predicted planets and save that file
@@ -242,7 +227,7 @@ def set_parameters(set_name, golden_set, input_file):
     outfile.close()
     
     #Create a second list with all stars in Hypatia and the probabilities
-    planets2 = df[(df.Prob>.0) & (df.sy_pnum==float('nan'))][['Sampled', 'Predicted', 'Prob']]
+    planets2 = df[(df.Prob>.0) & (df.Exo==0)][['Sampled', 'Predicted', 'Prob']]
     if golden: #if 10 stars were randomly taken out
         changeddf = pd.DataFrame([]) #make empty dataframe
         for star in changedhips:  #loop over the 10 known planets hosts (defined at top)
@@ -278,7 +263,7 @@ def set_parameters(set_name, golden_set, input_file):
     
     print('Simulation completed successfully.')
     if golden:
-        print("Changed indices and HIP numbers:")
+        print("Changed indices and star_names numbers:")
         print(changed)
         print(changedhips)
     
