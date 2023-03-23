@@ -110,6 +110,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             else:
                 otherFe.append(hyp.Fe[zz])
                 if plotXFe:
+                    print(star,'Value: ' + str(hyp.__getattribute__(n)[zz]),type(hyp.__getattribute__(n)[zz]),type(hyp.Fe[zz]))
                     # vars()[temp3].append(hyp[n][zz]-hyp.Fe[zz])
                     element_dict[n]["other"].append(hyp.__getattribute__(n)[zz] - hyp.Fe[zz])
                 else:
