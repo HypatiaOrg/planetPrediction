@@ -64,7 +64,9 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         ybinr = 0.9
     
     #--------------------------------Running the Numbers---------------------------------
-    
+
+    #Change the hype file to main.csv
+    #Add star_name column to planet_probabilities_big.csv
     hyp = ClassyReader("main.csv", delimiter=",")
     predicted = ClassyReader(set_name+"/figures/planet_probabilities_big.csv", delimiter=",")
 
@@ -110,13 +112,12 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             else:
                 otherFe.append(hyp.Fe[zz])
                 if plotXFe:
-                    print(star,'Value: ' + str(hyp.__getattribute__(n)[zz]),type(hyp.__getattribute__(n)[zz]),type(hyp.Fe[zz]))
+                    # print(star,'Value: ' + str(hyp.__getattribute__(n)[zz]),type(hyp.__getattribute__(n)[zz]),type(hyp.Fe[zz]))
                     # vars()[temp3].append(hyp[n][zz]-hyp.Fe[zz])
                     element_dict[n]["other"].append(hyp.__getattribute__(n)[zz] - hyp.Fe[zz])
                 else:
                     # vars()[temp3].append(hyp[n][zz])
                     element_dict[n]["other"].append(hyp.__getattribute__(n)[zz])
-    
     # Parameters for the bins in the x- and y-directions (which aren't equal)
         binwidth = 0.1
         binsx = np.arange(xbinl, xbinr + binwidth, binwidth)

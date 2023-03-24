@@ -81,6 +81,17 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
 
             planet_letter = str()
 
+            for key in hypatia_data_dict.keys():
+                if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
+#                    print(star_name,key,hypatia_data_dict[key])
+                    hypatia_data_dict.update({key:float('nan')})
+##                    print(star_name,key,hypatia_data_dict[key])
+##                    input()
+##                print(key, ' -> ', hypatia_data_dict[key])
+##                input()
+                
+                #hypatia_data_dict.update({key:float('nan')})
+
             # put all the data in one combined dictionary
             combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
             
@@ -115,6 +126,9 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                         #input()
                 if (test_count == len(exo_data_this_star.planet_letters)):
                     planet_data_dict['Exo'] = 1
+                    for key in hypatia_data_dict.keys():
+                        if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
+                            hypatia_data_dict.update({key:float('nan')})
                     combine_data(star_name, true_letter, hypatia_data_dict, planet_data_dict)
 
                     # Reset variables to default values
@@ -124,6 +138,9 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                     true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
                 elif (test_count == 0):
                     planet_data_dict['Exo'] = 1
+                    for key in hypatia_data_dict.keys():
+                        if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
+                            hypatia_data_dict.update({key:float('nan')})
                     combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
                     
                     # Reset variables to default values                    
