@@ -65,7 +65,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     
     #--------------------------------Running the Numbers---------------------------------
 
-    #Change the hype file to main.csv
+    #Change the hyp file to main.csv
     #Add star_name column to planet_probabilities_big.csv
     hyp = ClassyReader("main.csv", delimiter=",")
     predicted = ClassyReader(set_name+"/figures/planet_probabilities_big.csv", delimiter=",")
