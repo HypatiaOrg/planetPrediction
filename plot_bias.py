@@ -47,8 +47,6 @@ for multi in df['sy_pnum']:
     else:
         continue
 
-print(df['pl_orbper'])
-
 #print(count_transit, count_radial, count_imaging, count_obm)
 
 def plot_discovery_bias(count_transit, count_radial,
@@ -69,10 +67,7 @@ def plot_discovery_bias(count_transit, count_radial,
 def plot_mass_bias():
     mass_list = list()
     for i in range(len(df['pl_bmassj'])):
-        if (df['pl_bmassj'][i]=='nan'):
-            continue
-        else:
-            mass_list.append(df['pl_bmassj'][i])
+        mass_list.append(df['pl_bmassj'][i])
     plt.hist(mass_list, color='royalblue', ec='black', bins=15)
     plt.xlabel('Planet Mass (M$_J$)')
     plt.ylabel('Number of Planets')
@@ -98,10 +93,7 @@ def plot_multi_bias(multi_five, multi_four,
 def plot_period_bias():
     period_list = list()
     for i in range(len(df['pl_orbper'])):
-        if (df['pl_orbper'][i]==float('nan')):
-            continue
-        else:
-            period_list.append(df['pl_orbper'][i])
+        period_list.append(df['pl_orbper'][i])
     plt.hist(period_list, color='royalblue',ec='black',bins=100)
     plt.xlabel('Period (days)')
     plt.ylabel('Number of Planets')
@@ -120,7 +112,26 @@ def plot_radius_bias():
     plt.ylabel('Number of Planets')
     plt.title('Radii Biases')
     plt.show()
+    return
 
+def plot_element_bias():
+    columns = ('Fe','C','O','Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc',
+               'Ti','V','Cr','Mn','Co','Ni','Y')
+    rows = [df['Fe'].count(), df['C'].count(), df['O'].count(),
+            df['Na'].count(), df['Mg'].count(), df['Al'].count(),
+            df['Si'].count(), df['Ca'].count(), df['Sc'].count(),
+            df['Ti'].count(), df['V'].count(), df['Cr'].count(),
+            df['Mn'].count(), df['Co'].count(), df['Ni'].count(),
+            df['Y'].count()]
+
+    plt.barh(columns,rows,color = 'royalblue',ec='black')
+    plt.xlabel('Number of stars')
+    plt.ylabel('Elements')
+    plt.title('Elements vs. Number of stars')
+    for i, v in enumerate(rows):
+        plt.text(v, i, str(v))
+    plt.show()
+    return
 
 plot_discovery_bias(count_transit, count_radial,
                         count_imaging, count_obm, 'Discovery Method Biases')
@@ -130,3 +141,5 @@ plot_multi_bias(multi_five, multi_four,
                     'Multi Planet Systems')
 plot_period_bias()
 plot_radius_bias()
+plot_element_bias()
+
