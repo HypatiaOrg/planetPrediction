@@ -4,8 +4,19 @@ import matplotlib.pyplot as plt
 from planetpred.table_read import ClassyReader
 from planetpred.simulation_final_nrh import working_dir
 import pandas as pd
+import yaml
 
+#open csv
 df = pd.read_csv("main.csv")
+
+#open params.yaml
+setname = "set1"
+data_dir = setname
+full_path = os.path.join(working_dir,"{0}".format(data_dir),'params.yaml')
+stream = open(full_path, 'r')
+parameters = yaml.load(stream, Loader=yaml.FullLoader)
+
+#print(parameters, parameters['features'][0])
 
 #print(count_transit, count_radial, count_imaging, count_obm)
 
@@ -21,7 +32,7 @@ def plot_discovery_bias():
     plt.ylabel('Discovery Method')
     plt.title('Discovery Method Biases')
     for i, v in enumerate(rows):
-        plt.text(v, i, str(v))
+        plt.text(v, i, ' '+str(v))
     plt.show()
 
     return
@@ -50,7 +61,7 @@ def plot_multi_bias():
     plt.ylabel('Number of Planets in System')
     plt.title('Multi Planet Systems')
     for i, v in enumerate(rows):
-        plt.text(v, i, str(v))
+        plt.text(v, i, ' '+str(v))
     plt.show()
     return
 
@@ -78,29 +89,27 @@ def plot_radius_bias():
     plt.show()
     return
 
+# Use .yaml file to get the elements for column.
 def plot_element_bias():
-    columns = ('Fe','C','O','Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc',
-               'Ti','V','Cr','Mn','Co','Ni','Y')
-    rows = [df['Fe'].count(), df['C'].count(), df['O'].count(),
-            df['Na'].count(), df['Mg'].count(), df['Al'].count(),
-            df['Si'].count(), df['Ca'].count(), df['Sc'].count(),
-            df['Ti'].count(), df['V'].count(), df['Cr'].count(),
-            df['Mn'].count(), df['Co'].count(), df['Ni'].count(),
-            df['Y'].count()]
+    columns = parameters['features']
+    rows = []
+
+    for i in range(len(columns)):
+        rows.append(df[parameters['features'][i]].count())
 
     plt.barh(columns,rows,color = 'royalblue',ec='black')
     plt.xlabel('Number of stars')
     plt.ylabel('Elements')
     plt.title('Elements vs. Number of stars')
     for i, v in enumerate(rows):
-        plt.text(v, i, str(v))
+        plt.text(v, i, ' '+str(v))
     plt.show()
     return
 
-plot_discovery_bias()
-plot_mass_bias()
-plot_multi_bias()
-plot_period_bias()
-plot_radius_bias()
+#plot_discovery_bias()
+#plot_mass_bias()
+#plot_multi_bias()
+#plot_period_bias()
+#plot_radius_bias()
 plot_element_bias()
 
