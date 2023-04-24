@@ -81,7 +81,7 @@ def set_parameters(set_name, golden_set, input_file):
     df['pl_bmassj']  = df['pl_bmassj'].astype(np.number)
     df['Sampled']   = np.zeros((df.shape[0]))
     df['Predicted'] = np.zeros((df.shape[0]))
-    df = df.drop(['star_name'], 1)
+    df = df.drop(['star_name'], 1) # Why are the star names dropped?
     
     # Print a bunch of stuff in terminal
     print('Parameters used in simulation:')
@@ -117,7 +117,7 @@ def set_parameters(set_name, golden_set, input_file):
     auc_score_train       = []
     precision_score_train = []
     feat_imp_train        = pd.DataFrame(columns=features)
-    probabilities_total   = pd.DataFrame(index = df.index)
+    probabilities_total   = pd.DataFrame(index=df.index)
     
     print('iteration \t estimators')
     print('---------------------------')
@@ -143,11 +143,11 @@ def set_parameters(set_name, golden_set, input_file):
         Y = df_train.Exo
         
         # Note: Using gbtree booster
-        alg = XGBClassifier(learning_rate =0.1, #def=0.3, prevents overfitting and makes feature weight conservative
-                            n_estimators=1000, #number of boosted trees to fit
+        alg = XGBClassifier(learning_rate =0.1, #def=0.3, prevents overfitting and makes feature weight conservative, def=0.1 for 2019 paper
+                            n_estimators=1000, #number of boosted trees to fit, def=1000 for 2019 paper
                             max_depth=6, #def=6, max depth of tree/complexity
                             min_child_weight=1, #def=1, min weight needed to continue leaf partitioning
-                            gamma=0, #def=0, minimum loss reduction required to make partition on a leaf
+                            gamma=1, #def=0, minimum loss reduction required to make partition on a leaf
                             subsample=0.8, #def=1, subsample ratio of the training set
                             colsample_bytree=0.8, #def=1, subsample ratio of columns when making each tree
                             objective= 'binary:logistic', #def=linear, logistic regression for binary classification, output probability

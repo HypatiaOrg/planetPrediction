@@ -38,15 +38,15 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     if (set_name=="set5"):
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set4":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif (set_name=="set3"):
-        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set2":
-        elements = ['Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V',  'Cr', 'Mn', 'Co', 'Ni', 'Y', 'C', 'O']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set1":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set6":
-        elements = ['C', 'O', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
@@ -204,7 +204,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #Make the scatter plot.
         axScatter.scatter(otherFe, element_dict[n]["other"], s=60,facecolor="None",edgecolor="salmon", label='Stars Less Likely to Host ($<$90$\%$)')
         axScatter.scatter(exoFe,element_dict[n]["exo"],s=60,facecolor="None",edgecolor="navy", label='Known Planet Hosts')
-        axScatter.scatter(predFe,element_dict[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",edgecolor="#1b9e77", label='Predicted Planet Hosts ($<$90$\%$)')
+        axScatter.scatter(predFe,element_dict[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",edgecolor="#1b9e77", label='Predicted Planet Hosts ($>$90$\%$)')
         # Note that Predicted Planet is \ge but LaTeX is needed
 
     # Set the limits on the scatter plot.

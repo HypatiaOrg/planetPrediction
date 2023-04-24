@@ -1,0 +1,9 @@
+cv_folds:              5
+early_stopping_rounds: 50
+N_iterations:          200
+N_samples:             200
+gas_giant_mass:        0.0945
+
+features: ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
+
+dropnans: False
