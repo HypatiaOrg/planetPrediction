@@ -15,7 +15,7 @@ hypatia_data_path = os.path.join(base_dir, "hypatia.csv") # path to the local co
 hypatia_all = ClassyReader(filename=hypatia_data_path)
 # remove the star name column from the list of data keys
 hypatia_data_keys = copy(hypatia_all.keys)
-hypatia_data_keys.remove('f_preferred_name')
+hypatia_data_keys.remove('star_name')
 
 # fetch the NASA exoplanet archive data
 all_exo = AllExoPlanets(refresh_data=refresh_data, verbose=verbose)
@@ -25,9 +25,9 @@ exo_data_keys = all_exo.requested_data_types
 # to make the header of the combined data CSV file
 combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['Exo']
 
-cutoff_mass = 0.095
-ptic_id = ''
-previous_mass = 0
+# cutoff_mass_j = 0.095
+# previous_mass = 0
+cutoff_radius_e = 3.5
 
 class NoPlanet:
     def __init__(self):
@@ -50,6 +50,18 @@ def combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict):
     write_values = [str(combined_data_dict[key]) for key in combined_data_keys]
     # write the data to the combined data CSV file
     combined_data_file.write(",".join(write_values) + "\n")
+    return
+
+def replace_blank_strings():
+    # Replace blank strings with 'nan'
+    for key in hypatia_data_dict.keys():
+        if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
+            hypatia_data_dict.update({key:float('nan')})
+
+    # Replace blank strings with 'nan' for exoplanet data
+    for key in planet_data_dict.keys():
+        if (planet_data_dict[key] == '' or planet_data_dict[key] == ' '):
+            planet_data_dict.update({key:float('nan')})
     return
 
 # start writing the combined data CSV file
@@ -78,28 +90,15 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
             }
 
             planet_data_dict['Exo'] = 0
-
-            planet_letter = str()
-
-            for key in hypatia_data_dict.keys():
-                if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
-#                    print(star_name,key,hypatia_data_dict[key])
-                    hypatia_data_dict.update({key:float('nan')})
-##                    print(star_name,key,hypatia_data_dict[key])
-##                    input()
-##                print(key, ' -> ', hypatia_data_dict[key])
-##                input()
-                
-                #hypatia_data_dict.update({key:float('nan')})
-
-            # put all the data in one combined dictionary
+            planet_letter = str()            
+            replace_blank_strings()
             combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
             
         else:
-            test_count = 0
-            true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
+            D = {}
             for planet_letter in sorted(exo_data_this_star.planet_letters):
                 count += 1
+                
                 # get the exoplanet data for this planet
                 exo_planet = exo_data_this_star.__getattribute__(planet_letter)
 
@@ -108,42 +107,24 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                     exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
                     for exo_key in exo_data_keys
                 }
-                # Verify if the planet has a recorded mass
-                if(hasattr(exo_planet,'pl_bmassj')==False):
+                
+                # Verify if the planet has a recorded radius
+                if(hasattr(exo_planet,'pl_rade')==False):
                     continue
-                # Verify if the planet's mass is less than the cutoff mass.
-                elif(exo_planet.pl_bmassj < cutoff_mass):
+                # Verify that the planet radius is less than the cutoff radius for a small planet
+                elif(exo_planet.pl_rade > cutoff_radius_e):
                     continue
-                # It's writing the first entry first due to if/else position.
-                # Verify if the planet orbits the same star as the previous.
-                elif(len(exo_data_this_star.planet_letters) > 1):
-                    test_count += 1
-                    # If it does, check if the current planets mass is larger than the previous
-                    if(exo_planet.pl_bmassj > previous_mass):
-                        previous_mass = exo_planet.pl_bmassj
-                        true_letter = planet_letter
-                        #print(star_name, planet_letter, 'Im here')
-                        #input()
-                if (test_count == len(exo_data_this_star.planet_letters)):
+##                D[planet_letter] = exo_planet.pl_rade
+##            print(star_name,D,len(D))
+##            input()
+                
+                # Populate the Exo field if there is a detected exoplanet in the system
+                if(hasattr(exo_planet,'sy_pnum')):
                     planet_data_dict['Exo'] = 1
-                    for key in hypatia_data_dict.keys():
-                        if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
-                            hypatia_data_dict.update({key:float('nan')})
-                    combine_data(star_name, true_letter, hypatia_data_dict, planet_data_dict)
+                else:
+                    planet_data_dict['Exo'] = 0
 
-                    # Reset variables to default values
-                    ptic_id = exo_planet.tic_id
-                    previous_mass = 0
-                    test_count = 0
-                    true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
-                elif (test_count == 0):
-                    planet_data_dict['Exo'] = 1
-                    for key in hypatia_data_dict.keys():
-                        if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
-                            hypatia_data_dict.update({key:float('nan')})
-                    combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
-                    
-                    # Reset variables to default values                    
-                    ptic_id = exo_planet.tic_id
-                    previous_mass = 0
-                    true_letter = str(sorted(exo_data_this_star.planet_letters)[0])
+                replace_blank_strings()
+                # put all the data in one combined dictionary
+                # combine_data(star_name, max(D, key=D.get), hypatia_data_dict, planet_data_dict)
+                combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
