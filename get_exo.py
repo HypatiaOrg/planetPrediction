@@ -95,36 +95,71 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
             combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
             
         else:
-            D = {}
+            pl_radius = 0
+            pl_loop = 0
+            pl_num = len(exo_data_this_star.planet_letters)
+            pl_letter = str(sorted(exo_data_this_star.planet_letters)[0])
+            largest_letter = 0
+
             for planet_letter in sorted(exo_data_this_star.planet_letters):
                 count += 1
                 
                 # get the exoplanet data for this planet
                 exo_planet = exo_data_this_star.__getattribute__(planet_letter)
 
-                # make a dictionary of exoplanet data for this planet
-                planet_data_dict = {
-                    exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
-                    for exo_key in exo_data_keys
-                }
-                
-                # Verify if the planet has a recorded radius
+                # Verify if the planet has a recorded mass
                 if(hasattr(exo_planet,'pl_rade')==False):
                     continue
-                # Verify that the planet radius is less than the cutoff radius for a small planet
+                # Verify if the planet's mass is less than the cutoff mass.
                 elif(exo_planet.pl_rade > cutoff_radius_e):
                     continue
-##                D[planet_letter] = exo_planet.pl_rade
-##            print(star_name,D,len(D))
-##            input()
-                
-                # Populate the Exo field if there is a detected exoplanet in the system
-                if(hasattr(exo_planet,'sy_pnum')):
-                    planet_data_dict['Exo'] = 1
-                else:
-                    planet_data_dict['Exo'] = 0
+                # Verify if the planet orbits the same star as the previous.
+                elif(len(exo_data_this_star.planet_letters) > 1):
+                    # If it does, check if the current planets mass is larger than the previous
+                    if(exo_planet.pl_rade > pl_radius):
+                        pl_radius = exo_planet.pl_rade
+                        pl_letter = planet_letter
+                        largest_letter = pl_loop
+                    pl_loop += 1
+                # Write out the data
+                if (pl_loop == pl_num):
+                    replace_blank_strings()
+                    exo_true = exo_data_this_star.__getattribute__(pl_letter)
+                    planet_true_dict = {
+                        exo_key: (exo_true.__getattribute__(exo_key) if exo_key in exo_true.planet_params else "")
+                        for exo_key in exo_data_keys
+                        }
+                    planet_true_dict['Exo'] = 1
+                    # The error is in planet_data_dict since I'm writing out the final planet in the dictionary
+                    combine_data(star_name, pl_letter, hypatia_data_dict, planet_true_dict)
 
-                replace_blank_strings()
-                # put all the data in one combined dictionary
-                # combine_data(star_name, max(D, key=D.get), hypatia_data_dict, planet_data_dict)
-                combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+##                    # DEBUG
+##                    if (star_name == 'HIP 17264'):
+##                        print(star_name, planet_letter, exo_planet.pl_rade)
+##                        print(star_name, pl_letter, pl_radius)
+##                        exo_true = exo_data_this_star.__getattribute__(pl_letter)
+##                        print(exo_true)
+##                        planet_true_dict = {
+##                            exo_key: (exo_true.__getattribute__(exo_key) if exo_key in exo_true.planet_params else "")
+##                            for exo_key in exo_data_keys
+##                        }
+##                        print(planet_true_dict)
+##                        input()               
+
+                    # Reset variables to default values
+                    pl_radius = 0
+                    pl_loop = 0
+                    pl_letter = str(sorted(exo_data_this_star.planet_letters)[0])
+                elif (pl_loop == 0):
+                    replace_blank_strings()
+                    # make a dictionary of exoplanet data for this planet
+                    planet_data_dict = {
+                        exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
+                        for exo_key in exo_data_keys
+                    }
+                    planet_data_dict['Exo'] = 1
+                    combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
+                    
+                    # Reset variables to default values
+                    pl_radius = 0
+                    pl_letter = str(sorted(exo_data_this_star.planet_letters)[0])
