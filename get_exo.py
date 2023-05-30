@@ -53,7 +53,7 @@ def combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict):
     return
 
 def replace_blank_strings():
-    # Replace blank strings with 'nan'
+    # Replace blank strings with 'nan' for hypatia data
     for key in hypatia_data_dict.keys():
         if (hypatia_data_dict[key] == '' or hypatia_data_dict[key] == ' '):
             hypatia_data_dict.update({key:float('nan')})
@@ -123,15 +123,15 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                     pl_loop += 1
                 # Write out the data
                 if (pl_loop == pl_num):
-                    replace_blank_strings()
                     exo_true = exo_data_this_star.__getattribute__(pl_letter)
-                    planet_true_dict = {
+                    planet_data_dict = {
                         exo_key: (exo_true.__getattribute__(exo_key) if exo_key in exo_true.planet_params else "")
                         for exo_key in exo_data_keys
                         }
-                    planet_true_dict['Exo'] = 1
+                    planet_data_dict['Exo'] = 1
                     # The error is in planet_data_dict since I'm writing out the final planet in the dictionary
-                    combine_data(star_name, pl_letter, hypatia_data_dict, planet_true_dict)
+                    replace_blank_strings()
+                    combine_data(star_name, pl_letter, hypatia_data_dict, planet_data_dict)
 
 ##                    # DEBUG
 ##                    if (star_name == 'HIP 17264'):
@@ -151,13 +151,13 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                     pl_loop = 0
                     pl_letter = str(sorted(exo_data_this_star.planet_letters)[0])
                 elif (pl_loop == 0):
-                    replace_blank_strings()
                     # make a dictionary of exoplanet data for this planet
                     planet_data_dict = {
                         exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
                         for exo_key in exo_data_keys
                     }
                     planet_data_dict['Exo'] = 1
+                    replace_blank_strings()
                     combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)
                     
                     # Reset variables to default values

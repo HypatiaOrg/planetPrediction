@@ -35,16 +35,16 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #------------------------Input Changes-----------------------------------------
     
     # If folder name is set(number), it looks for the following elements. Copy the ones I want.
-    if (set_name=="set5"):
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
-    elif set_name=="set4":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
-    elif (set_name=="set3"):
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
+    if (set_name=="set1"):
+        elements = ['Mg', 'Si', 'Ti']
     elif set_name=="set2":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
-    elif set_name=="set1":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
+        elements = ['Mg', 'Si', 'Ti', 'Fe']
+    elif (set_name=="set3"):
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti']
+    elif set_name=="set4":
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
+    elif set_name=="set5":
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
     elif set_name=="set6":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     else:

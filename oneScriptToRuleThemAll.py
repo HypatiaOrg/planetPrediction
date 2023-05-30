@@ -17,13 +17,13 @@ input_file_name = File that has abundances and whether a star is an exoplanet ho
 '''
 
 #file_name = "simulation_final_nrh.py"
-setname = "set5"
+setname = "set1"
 goldenYN = "True"
 XFeYN = "True"
 plotYN = "True"
 input_file_name = "main.csv"
 
-for i in range(10): #Unique standalone trees that have nothing to do with each other
+for i in range(25): #Unique standalone trees that have nothing to do with each other
     set_parameters(set_name=setname, golden_set=goldenYN, input_file=input_file_name)
     plot_parameters(set_name=setname)
     hyp_plot_parameters(set_name=setname, plotXFe=XFeYN, saveplot=plotYN)
