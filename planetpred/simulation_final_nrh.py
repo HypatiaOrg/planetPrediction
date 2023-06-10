@@ -64,7 +64,7 @@ def set_parameters(set_name, golden_set, input_file):
     # Make a golden set if True. Then select 10 random confirmed exoplanet host stars as the golden.
     if golden:
         df2 = df.copy()
-        df2.loc[df2[(df2['Exo']==1) & (df2['pl_rade']>parameters['small_planet_radius'])].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
+        df2.loc[df2[(df2['Exo']==1) & (df2['pl_rade']<parameters['small_planet_radius'])].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
         yy = df2.loc[df2['Exo'] == 0].index
         zz = df.loc[df['Exo'] == 0].index
         changed = [ind for ind in yy if not ind in zz]
@@ -97,16 +97,16 @@ def set_parameters(set_name, golden_set, input_file):
     N_samples = parameters['N_samples']
     small_planet_radius = parameters['small_planet_radius']
     features = parameters['features']
+
+    # Planet radius is not required. We do not want to drop those with no radius detected as it will remove all
+    # entries with Exo = 0
+    relevant_columns = features + ['Exo', 'Sampled', 'Predicted']    
     
-    relevant_columns = features + ['Exo', 'pl_rade', 'Sampled', 'Predicted']
-
-    #Redefine dataframe with the "relevant columns" and remove nans if dropnans==True in yaml
+    # Remove any entries with 'nan' values in the relevant_columns but keep the dataframe as is
+    # The '*' arguement is an unpacking operator which allows us to use the individual elements in the
+    # relevant_columns list as arguments for the dropna function
     if(parameters['dropnans']):
-        df = df[relevant_columns].dropna()
-##    print(df)
-##    input()
-
-    #print(df[(df['Exo']==1) & (df['pl_bmassj']>small_planet_radius)])
+        df = df.dropna(subset=[*relevant_columns])
     
     print('Number of samples used in simulation: {0}'.format(df.shape[0]))
     
@@ -127,8 +127,9 @@ def set_parameters(set_name, golden_set, input_file):
     # Loop for all of the iterations (defined in yaml)
     for iteration in range(0, N_iterations):
 
-        #dataframe of 200 random hosts with giant planets
-        df_iter_with_exo = df[(df['Exo']==1) & (df['pl_rade']>small_planet_radius)].sample(N_samples, random_state=np.random.RandomState())
+        #dataframe of 200 random hosts with small planets
+        df_iter_with_exo = df[(df['Exo']==1) & (df['pl_rade']<small_planet_radius)].sample(N_samples, random_state=np.random.RandomState())
+
         #dataframe of 200 random non hosts
         df_iter_none_exo = df[df['Exo']==0].sample(N_samples, random_state=np.random.RandomState())
         
@@ -151,7 +152,7 @@ def set_parameters(set_name, golden_set, input_file):
                             subsample=0.8, #def=1, subsample ratio of the training set
                             colsample_bytree=0.8, #def=1, subsample ratio of columns when making each tree
                             objective= 'binary:logistic', #def=linear, logistic regression for binary classification, output probability
-                            nthread=2, #originall = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
+                            nthread=100, #originall = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
                             scale_pos_weight=1, #def=1, balance positive and neg weights
                             seed=27) #def=0, random number seed
                             

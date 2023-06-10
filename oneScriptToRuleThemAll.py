@@ -17,7 +17,7 @@ input_file_name = File that has abundances and whether a star is an exoplanet ho
 '''
 
 #file_name = "simulation_final_nrh.py"
-setname = "set1"
+setname = "set5"
 goldenYN = "True"
 XFeYN = "True"
 plotYN = "True"
@@ -26,8 +26,11 @@ input_file_name = "main.csv"
 for i in range(25): #Unique standalone trees that have nothing to do with each other
     set_parameters(set_name=setname, golden_set=goldenYN, input_file=input_file_name)
     plot_parameters(set_name=setname)
-    hyp_plot_parameters(set_name=setname, plotXFe=XFeYN, saveplot=plotYN)
+##    hyp_plot_parameters(set_name=setname, plotXFe=XFeYN, saveplot=plotYN)
 
+# Plot the predicted planet hosts after the main loop runs.
+# New setup loops through all files after they are produced.
+hyp_plot_parameters(set_name=setname, plotXFe=XFeYN, saveplot=plotYN)
 print("Save the last planet_probabilities lists as _big and run simulation_hyp_plots")
 
 
