@@ -46,9 +46,9 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     elif set_name=="set4":
         elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
     elif set_name=="set5":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
     elif set_name=="set6":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 

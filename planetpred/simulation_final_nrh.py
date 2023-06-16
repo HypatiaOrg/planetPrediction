@@ -107,6 +107,7 @@ def set_parameters(set_name, golden_set, input_file):
     # relevant_columns list as arguments for the dropna function
     if(parameters['dropnans']):
         df = df.dropna(subset=[*relevant_columns])
+##        df=df.dropna(subset=['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Exo', 'Sampled', 'Predicted'])
     
     print('Number of samples used in simulation: {0}'.format(df.shape[0]))
     
@@ -152,7 +153,7 @@ def set_parameters(set_name, golden_set, input_file):
                             subsample=0.8, #def=1, subsample ratio of the training set
                             colsample_bytree=0.8, #def=1, subsample ratio of columns when making each tree
                             objective= 'binary:logistic', #def=linear, logistic regression for binary classification, output probability
-                            nthread=100, #originall = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
+                            nthread=1, #original = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
                             scale_pos_weight=1, #def=1, balance positive and neg weights
                             seed=27) #def=0, random number seed
                             
