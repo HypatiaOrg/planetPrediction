@@ -18,6 +18,7 @@ from glob import glob
 #rc('text', usetex=True)  #for LaTeX to make the plots look good
 plt.style.use('ggplot')  #'default'
 plt.rcParams['axes.facecolor']='whitesmoke'
+plotMolar = True
 
 #---------------- Definition---------------------------------------------
 
@@ -39,58 +40,46 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     # If folder name is set(number), it looks for the following elements. Copy the ones I want.
     if (set_name=="set1"):
         elements = ['Mg', 'Si', 'Ti']
-    elif set_name=="set2":
+    elif set_name=="set2-drop":
         elements = ['Mg', 'Si', 'Ti', 'Fe']
     elif (set_name=="set3"):
         elements = ['C', 'O', 'Mg', 'Si', 'Ti']
     elif set_name=="set4":
         elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
     elif set_name=="set5":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
     elif set_name=="set6":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="set7":
-        elements = ['Si/Mg', 'Ti/Mg', 'Fe/Mg', 'Ca/Mg']
+        elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'Ca_Mg']
     elif set_name=="set8":
-        elements = ['Si/Mg', 'Ti/Mg', 'Fe/Mg', 'C/Mg', 'Ca/Mg', 'O/Mg']
+        elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'C_Mg', 'Ca_Mg', 'O_Mg']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
     
-    
-    if plotXFe:
-        xbinl = -1.0
-        xbinr = 0.7
-        ybinl = -0.7
-        ybinr = 0.9
-    else:
-        xbinl = -1.0
-        xbinr = 0.7
-        ybinl = -0.9
-        ybinr = 0.9
-    
     #--------------------------------Running the Numbers---------------------------------
     #Utilize planet_probabilities_all.csv for each run.
     count = 0
-    hyp = ClassyReader("main.csv",delimiter=",")
+    hyp = ClassyReader("main_copy.csv",delimiter=",")
     for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
-        print(file)
+##        print(file)
 
         predicted = ClassyReader(file,delimiter=",")
 
         element_dict = {}
         for zz, n in enumerate(elements):
-            print(n)
+##            print(n)
             element_dict[n] = {"pred": [], "exo": [], "other": []}
+
             # temp1 = "pred"+n
             # temp2 = "exo"+n
             # temp3 = "other"+n
         
-        
-            #Find the abundances for the star, based on whether it's a predicted exoplanet host
+            # Find the abundances for the star, based on whether it's a predicted exoplanet host
             # star, an actual planet host star, or neither. Then, depending on whether or not
-            # [X/Fe] is to be plotted, calculate the abundance.
-
+            # [X/Fe] is to be plotted, calculate the abundance, if [X/Fe] is not plotted (False)
+            # then [X/H] is plotted for molar ratios a third option has to be made?
 
             # vars()[temp1] = []
             # vars()[temp2] = []
@@ -102,30 +91,75 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 
             for zz, star in enumerate(hyp.star_name):
                 if star in predicted.star_name:
-                    predFe.append(hyp.Fe[zz])
-                    if plotXFe:
-                        # vars()[temp1].append(hyp[n][zz]-hyp.Fe[zz])
-                        element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz]-hyp.Fe[zz])
-                    else:
-                        # vtars()[temp1].append(hyp[n][zz])
-                        element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz])
+                    predFe.append(hyp.Fe_Mg[zz])
+                    if plotMolar:
+                        element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz])                        
+##                    predFe.append(hyp.Fe[zz])
+##                    elif plotXFe:
+##                        # vars()[temp1].append(hyp[n][zz]-hyp.Fe[zz])
+##                        element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz]-hyp.Fe[zz])
+##                    else:
+##                        # vtars()[temp1].append(hyp[n][zz])
+##                        element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz])
                 elif hyp.Exo[zz]==1:
-                    exoFe.append(hyp.Fe[zz])
-                    if plotXFe:
-                        # vars()[temp2].append(hyp[n][zz]-hyp.Fe[zz])
-                        element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz] - hyp.Fe[zz])
-                    else:
-                        # vars()[temp2].append(hyp[n][zz])
+                    exoFe.append(hyp.Fe_Mg[zz])
+                    if plotMolar:
                         element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz])
+##                    exoFe.append(hyp.Fe[zz])
+##                    elif plotXFe:
+##                        # vars()[temp2].append(hyp[n][zz]-hyp.Fe[zz])
+##                        element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz] - hyp.Fe[zz])
+##                    else:
+##                        # vars()[temp2].append(hyp[n][zz])
+##                        element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz])
                 else:
-                    otherFe.append(hyp.Fe[zz])
-                    if plotXFe:
-                        # print(star,'Value: ' + str(hyp.__getattribute__(n)[zz]),type(hyp.__getattribute__(n)[zz]),type(hyp.Fe[zz]))
-                        # vars()[temp3].append(hyp[n][zz]-hyp.Fe[zz])
-                        element_dict[n]["other"].append(hyp.__getattribute__(n)[zz] - hyp.Fe[zz])
-                    else:
-                        # vars()[temp3].append(hyp[n][zz])
+                    otherFe.append(hyp.Fe_Mg[zz])
+                    if plotMolar:
                         element_dict[n]["other"].append(hyp.__getattribute__(n)[zz])
+##                    otherFe.append(hyp.Fe[zz])
+##                    if plotXFe:
+##                        # print(star,'Value: ' + str(hyp.__getattribute__(n)[zz]),type(hyp.__getattribute__(n)[zz]),type(hyp.Fe[zz]))
+##                        # vars()[temp3].append(hyp[n][zz]-hyp.Fe[zz])
+##                        element_dict[n]["other"].append(hyp.__getattribute__(n)[zz] - hyp.Fe[zz])
+##                    else:
+##                        # vars()[temp3].append(hyp[n][zz])
+##                        element_dict[n]["other"].append(hyp.__getattribute__(n)[zz])
+##            print(predFe)
+##            input()
+
+            if plotMolar:
+                print(n)
+                if (n == "Si_Mg"):
+                    xbinl = -0.1
+                    xbinr = 1.5
+                    ybinl = 0
+                    ybinr = 2.5
+                elif (n == "Ti_Mg"):
+                    xbinl = -0.1
+                    xbinr = 1.5
+                    ybinl = 0
+                    ybinr = 0.010
+                elif (n == "Ca_Mg"):
+                    xbinl = -0.1
+                    xbinr = 1.5
+                    ybinl = 0
+                    ybinr = 0.15
+                elif (n == "C_Mg"):
+                    xbinl = -0.1
+                    xbinr = 1.5
+                    ybinl = 0
+                    ybinr = 2.5
+                elif (n == "O_Mg"):
+                    xbinl = -0.1
+                    xbinr = 1.5
+                    ybinl = 0
+                    ybinr = 2.5
+                else:
+                    xbinl = -0.1
+                    xbinr = 1.5
+                    ybinl = 0
+                    ybinr = 1.5
+
             # Parameters for the bins in the x- and y-directions (which aren't equal)
             binwidth = 0.1
             binsx = np.arange(xbinl, xbinr + binwidth, binwidth)
@@ -213,8 +247,8 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             axScatter.scatter(otherFe, element_dict[n]["other"], s=60,facecolor="None",edgecolor="salmon", label='Stars Less Likely to Host ($<$90$\%$)')
             axScatter.scatter(exoFe,element_dict[n]["exo"],s=60,facecolor="None",edgecolor="navy", label='Known Planet Hosts')
             axScatter.scatter(predFe,element_dict[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",edgecolor="#1b9e77", label='Predicted Planet Hosts ($>$90$\%$)')
-            # Note that Predicted Planet is \ge but LaTeX is needed
-
+            # Note that Predicted Planet is \ge but LaTeX is needed          
+                
             # Set the limits on the scatter plot.
             axScatter.set_xlim( [xbinl, xbinr] )
             axScatter.set_ylim( [ybinl, ybinr] )
@@ -230,41 +264,50 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         
             axHistx.set_xlim(axScatter.get_xlim())
             axHisty.set_ylim(axScatter.get_ylim())
+
+            if plotMolar:
+                axScatter.set_ylabel(n.replace("_", "/"),fontsize=15)
+                axScatter.set_xlabel("Fe/Mg",fontsize=15)
+                plt.show()
         
-            # Adapt the labeling based on what's being plotted.
-            axScatter.set_xlabel("[Fe/H]", fontsize=15)
-        
-            if plotXFe:
-                if n=="Y":
-                    axScatter.set_ylabel("[Y/Fe]", fontsize=15)
-                else:
-                    axScatter.set_ylabel("["+n+"/Fe]", fontsize=15)
-            else:
-                if n=="Y":
-                    axScatter.set_ylabel("[Y/H]", fontsize=15)
-                else:
-                    axScatter.set_ylabel("["+n+"/H]", fontsize=15)
+##            # Adapt the labeling based on what's being plotted.
+##            axScatter.set_xlabel("[Fe/H]", fontsize=15)
+##        
+##            if plotXFe:
+##                if n=="Y":
+##                    axScatter.set_ylabel("[Y/Fe]", fontsize=15)
+##                else:
+##                    axScatter.set_ylabel("["+n+"/Fe]", fontsize=15)
+##            else:
+##                if n=="Y":
+##                    axScatter.set_ylabel("[Y/H]", fontsize=15)
+##                else:
+##                    axScatter.set_ylabel("["+n+"/H]", fontsize=15)
         
             axHistx.set_ylabel("Relative Dist", fontsize=12)
             axHisty.set_xlabel("Relative Dist", fontsize=12)
         
-            if (n=="Mn" or not plotXFe):
-                axScatter.legend(loc='upper left', scatterpoints=1,fontsize=8)
-            else:
-                axScatter.legend(loc='lower left', scatterpoints=1,fontsize=8)
-        
-            if saveplot:
+##            if (n=="Mn" or not plotXFe):
+##                axScatter.legend(loc='upper left', scatterpoints=1,fontsize=8)
+##            else:
+##                axScatter.legend(loc='lower left', scatterpoints=1,fontsize=8)
+##
+            if plotMolar and saveplot:
                 full_plot_dir = os.path.join(working_dir, set_name, 'figures')
-                if not os.path.isdir(full_plot_dir):
-                    os.mkdir(full_plot_dir)
-                if plotXFe:
-                    plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"Fe"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf")) #note only pdf will show the cross-hatching
-                else:
-                    plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"H-"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf"))
-            else:
-                plt.show()
+                plt.savefig(os.path.join(full_plot_dir, "predicted"+n+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf"))
+            
+##            if saveplot:
+##                full_plot_dir = os.path.join(working_dir, set_name, 'figures')
+##                if not os.path.isdir(full_plot_dir):
+##                    os.mkdir(full_plot_dir)
+##                if plotXFe:
+##                    plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"Fe"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf")) #note only pdf will show the cross-hatching
+##                else:
+##                    plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"H-"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf"))
+##            else:
+##                plt.show()
+##
+##        count+=1
+##    print(count)
 
-        count+=1
-    print(count)
-
-##hyp_plot_parameters("set3", True, True)
+hyp_plot_parameters("set8", False, False)

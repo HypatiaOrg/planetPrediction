@@ -23,11 +23,22 @@ all_exo = AllExoPlanets(refresh_data=refresh_data, verbose=verbose)
 exo_data_keys = all_exo.requested_data_types
 
 # to make the header of the combined data CSV file
-combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['Exo']
+combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['C/Mg','O/Mg','Si/Mg','Ca/Mg','Ti/Mg','Fe/Mg'] + ['Exo']
 
 # cutoff_mass_j = 0.095
 # previous_mass = 0
 cutoff_radius_e = 3.5
+
+# Lodders based abundances as stated in table 1 of Hinkel et al. 2022
+abundances_sun = {
+    'C': 8.39,
+    'O': 8.73,
+    'Mg': 7.54,
+    'Si': 7.53,
+    'Ca': 6.31,
+    'Ti': 4.93,
+    'Fe': 7.46,
+    }
 
 class NoPlanet:
     def __init__(self):
@@ -40,6 +51,17 @@ class NoPlanet:
         def __init__(self):
             self.planet_params = 'nan'
             self.exo_key = 'nan'
+
+# Calculate the molar ratio for each record
+def molar_ratio(hypatia_data_dict,planet_data_dict, element, abundances_sun):
+    for key in abundances_sun:
+        if (key == element):
+            continue
+        else:
+            molar_ratio = (10**(hypatia_data_dict[key]+abundances_sun[key]))/(
+            10**(hypatia_data_dict[element]+abundances_sun[element]))
+            planet_data_dict[str(key)+'_'+str(element)] = molar_ratio
+    return
 
 # put all the data in one combined dictionary
 def combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict):
@@ -89,6 +111,7 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                 for exo_key in exo_data_keys
             }
 
+            molar_ratio(hypatia_data_dict, planet_data_dict, 'Mg', abundances_sun)
             planet_data_dict['Exo'] = 0
             planet_letter = str()            
             replace_blank_strings()
@@ -128,6 +151,7 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                         exo_key: (exo_true.__getattribute__(exo_key) if exo_key in exo_true.planet_params else "")
                         for exo_key in exo_data_keys
                         }
+                    molar_ratio(hypatia_data_dict, planet_data_dict, 'Mg', abundances_sun)
                     planet_data_dict['Exo'] = 1
                     # The error is in planet_data_dict since I'm writing out the final planet in the dictionary
                     replace_blank_strings()
@@ -156,6 +180,7 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                         exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
                         for exo_key in exo_data_keys
                     }
+                    molar_ratio(hypatia_data_dict, planet_data_dict, 'Mg', abundances_sun)
                     planet_data_dict['Exo'] = 1
                     replace_blank_strings()
                     combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)

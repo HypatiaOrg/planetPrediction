@@ -64,7 +64,7 @@ def set_parameters(set_name, golden_set, input_file):
     # Make a golden set if True. Then select 10 random confirmed exoplanet host stars as the golden.
     if golden:
         df2 = df.copy()
-        df2.loc[df2[(df2['Exo']==1) & (df2['pl_rade']<parameters['small_planet_radius'])].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
+        df2.loc[df2[(df2['Exo']==1) & ((df2['pl_rade']>parameters['lower_planet_radius']) & (df2['pl_rade']<parameters['upper_planet_radius']))].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
         yy = df2.loc[df2['Exo'] == 0].index
         zz = df.loc[df['Exo'] == 0].index
         changed = [ind for ind in yy if not ind in zz]
@@ -95,7 +95,9 @@ def set_parameters(set_name, golden_set, input_file):
     early_stopping_rounds = parameters['early_stopping_rounds']
     N_iterations = parameters['N_iterations']
     N_samples = parameters['N_samples']
-    small_planet_radius = parameters['small_planet_radius']
+    upper_planet_radius = parameters['upper_planet_radius']
+    lower_planet_radius = parameters['lower_planet_radius']
+##    small_planet_radius = parameters['small_planet_radius']
     features = parameters['features']
 
     # Planet radius is not required. We do not want to drop those with no radius detected as it will remove all
@@ -129,7 +131,7 @@ def set_parameters(set_name, golden_set, input_file):
     for iteration in range(0, N_iterations):
 
         #dataframe of 200 random hosts with small planets
-        df_iter_with_exo = df[(df['Exo']==1) & (df['pl_rade']<small_planet_radius)].sample(N_samples, random_state=np.random.RandomState())
+        df_iter_with_exo = df[(df['Exo']==1) & ((df['pl_rade']>lower_planet_radius) & (df['pl_rade']<upper_planet_radius))].sample(N_samples, random_state=np.random.RandomState())
 
         #dataframe of 200 random non hosts
         df_iter_none_exo = df[df['Exo']==0].sample(N_samples, random_state=np.random.RandomState())
@@ -190,8 +192,8 @@ def set_parameters(set_name, golden_set, input_file):
         precision_score_train.append(precision_score)
         cfm += metric_score
 
-        #2MASS I is a duplicated index in the main.csv sheet, keep one of the entries?
-        #Array lengths not matching up
+        # 2MASS I is a duplicated index in the main.csv sheet
+        # Array lengths not matching up
         df.loc[df_predict.index, 'Sampled']   += np.ones(len(df_predict.index))
         df.loc[df_predict.index, 'Predicted'] += alg.predict(df_predict[features])
         df.loc[df_predict.index, 'Prob']       = alg.predict(df_predict[features])

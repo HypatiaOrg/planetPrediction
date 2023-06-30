@@ -1,8 +1,6 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.realpath("__file__")))
-
-
 from planetpred.simulation_final_nrh import set_parameters
 from planetpred.simulation_plots import plot_parameters
 from planetpred.simulation_hyp_plots import hyp_plot_parameters
@@ -17,7 +15,7 @@ input_file_name = File that has abundances and whether a star is an exoplanet ho
 '''
 
 #file_name = "simulation_final_nrh.py"
-setname = "set5"
+setname = "set4"
 goldenYN = "True"
 XFeYN = "True"
 plotYN = "True"
