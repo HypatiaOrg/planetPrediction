@@ -23,7 +23,7 @@ all_exo = AllExoPlanets(refresh_data=refresh_data, verbose=verbose)
 exo_data_keys = all_exo.requested_data_types
 
 # to make the header of the combined data CSV file
-combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['C/Mg','O/Mg','Si/Mg','Ca/Mg','Ti/Mg','Fe/Mg'] + ['Exo']
+combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['C_Mg','O_Mg','Si_Mg','Ca_Mg','Ti_Mg','Fe_Mg'] + ['Exo']
 
 # cutoff_mass_j = 0.095
 # previous_mass = 0

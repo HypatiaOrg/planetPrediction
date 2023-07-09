@@ -81,7 +81,7 @@ def set_parameters(set_name, golden_set, input_file):
     df['pl_rade']  = df['pl_rade'].astype(np.number)
     df['Sampled']   = np.zeros((df.shape[0]))
     df['Predicted'] = np.zeros((df.shape[0]))
-    df = df.drop(['star_name'], 1) # Why are the star names dropped?
+    df = df.drop(['star_name'], axis=1)
     
     # Print a bunch of stuff in terminal
     print('Parameters used in simulation:')
@@ -142,7 +142,7 @@ def set_parameters(set_name, golden_set, input_file):
         df_predict       = df[~df.index.isin(df_train.index)]
         
         # The train dataframe with everything but the Exo column
-        X = df_train.drop(['Exo'],1)
+        X = df_train.drop(['Exo'],axis=1)
         # The Exo column (and hips)
         Y = df_train.Exo
         
@@ -155,9 +155,10 @@ def set_parameters(set_name, golden_set, input_file):
                             subsample=0.8, #def=1, subsample ratio of the training set
                             colsample_bytree=0.8, #def=1, subsample ratio of columns when making each tree
                             objective= 'binary:logistic', #def=linear, logistic regression for binary classification, output probability
-                            nthread=1, #original = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
+                            nthread=8, #original = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
                             scale_pos_weight=1, #def=1, balance positive and neg weights
-                            seed=27) #def=0, random number seed
+                            seed=27,  #def=0, random number seed
+                            eval_metric='auc') # To prevent deprecation warning use here
                             
         #get input parameters of algorithm
         xgb_param = alg.get_xgb_params()
@@ -171,7 +172,8 @@ def set_parameters(set_name, golden_set, input_file):
         alg.set_params(n_estimators=cvresult.shape[0])
         print(iteration, '\t \t', cvresult.shape[0])
         
-        alg.fit(X[features], Y, eval_metric='auc')
+##        alg.fit(X[features], Y, eval_metric='auc')
+        alg.fit(X[features],Y)
     
         dtrain_predictions = alg.predict(X[features])
         dtrain_predprob    = alg.predict_proba(X[features])[:,1]
@@ -235,11 +237,13 @@ def set_parameters(set_name, golden_set, input_file):
     if golden: #if 10 stars were randomly taken out
         changeddf = pd.DataFrame([]) #make empty dataframe
         for star in changedhips:  #loop over the 10 known planets hosts (defined at top)
-            changeddf = changeddf.append(planets2.loc[planets2.index==star])
+##            changeddf = changeddf.append(planets2.loc[planets2.index==star])
+            pd.concat([changeddf,planets2.loc[planets2.index==star]])
             if planets2.loc[planets2.index==star].empty: #catch for when a known planet host was cut (bc of abunds)
                 temp = pd.Series([nan,nan,nan], index=['Sampled', 'Predicted', 'Prob'])
                 temp.name = star
-                changeddf = changeddf.append(temp) #append blank file (with star name as index)
+##                changeddf = changeddf.append(temp) #append blank file (with star name as index)
+                pd.concat([changeddf,temp])
         #Save golden set as a separate file with the date and time as a tag
         filename ='{0}/figures/goldenSetProbabilities'+str(datetime.today().strftime('-%h%d-%H%M'))+'.csv'
         changeddf.to_csv(filename.format(set_number), na_rep=" ")

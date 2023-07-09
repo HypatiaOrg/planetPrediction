@@ -2,8 +2,9 @@ cv_folds:              5
 early_stopping_rounds: 50
 N_iterations:          20
 N_samples:             20
-gas_giant_mass:        0.0945
+upper_planet_radius:   2.0
+lower_planet_radius:   1.0
 
-features: ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
+features: ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
 
-dropnans: False
+dropnans: True
