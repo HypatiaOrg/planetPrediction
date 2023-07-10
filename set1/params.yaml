@@ -1,9 +1,0 @@
-cv_folds:              5
-early_stopping_rounds: 50
-N_iterations:          3000
-N_samples:             200
-small_planet_radius:   3.5
-
-features: ['Mg', 'Si', 'Ti']
-
-dropnans: False

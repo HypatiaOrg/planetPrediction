@@ -106,10 +106,10 @@ def plot_element_bias():
     plt.show()
     return
 
-#plot_discovery_bias()
+plot_discovery_bias()
 #plot_mass_bias()
 #plot_multi_bias()
 #plot_period_bias()
 #plot_radius_bias()
-plot_element_bias()
+#plot_element_bias()
 

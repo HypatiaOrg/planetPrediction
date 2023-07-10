@@ -155,7 +155,7 @@ def set_parameters(set_name, golden_set, input_file):
                             subsample=0.8, #def=1, subsample ratio of the training set
                             colsample_bytree=0.8, #def=1, subsample ratio of columns when making each tree
                             objective= 'binary:logistic', #def=linear, logistic regression for binary classification, output probability
-                            nthread=8, #original = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
+                            nthread=1, #original = 8, but issue on laptop...def=max, number of parallel threads used to run xgboost
                             scale_pos_weight=1, #def=1, balance positive and neg weights
                             seed=27,  #def=0, random number seed
                             eval_metric='auc') # To prevent deprecation warning use here

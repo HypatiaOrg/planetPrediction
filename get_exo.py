@@ -1,4 +1,5 @@
 import os
+import yaml
 from copy import copy
 
 from autostar.table_read import row_dict, ClassyReader
@@ -22,14 +23,15 @@ all_exo = AllExoPlanets(refresh_data=refresh_data, verbose=verbose)
 # get all the exoplanet data keys
 exo_data_keys = all_exo.requested_data_types
 
-# to make the header of the combined data CSV file
-combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['C_Mg','O_Mg','Si_Mg','Ca_Mg','Ti_Mg','Fe_Mg'] + ['Exo']
-
-# cutoff_mass_j = 0.095
-# previous_mass = 0
-cutoff_radius_e = 3.5
+# Define the molar ratios to be utilized for the experiment
+# We are using the "_" symbol instead of the regular "/" symbol due
+# to how python interprets "/" (operator for division).
+molar_ratio_keys = ['C_Mg','O_Mg','Si_Mg','Ca_Mg','Ti_Mg','Fe_Mg',
+                    'C_Si', 'O_Si', 'Mg_Si', 'Ca_Si', 'Ti_Si', 'Fe_Si',
+                    'C_O', 'Si_O', 'Mg_O', 'Ca_O', 'Ti_O', 'Fe_O']
 
 # Lodders based abundances as stated in table 1 of Hinkel et al. 2022
+# Utilized for molar ratio calculations
 abundances_sun = {
     'C': 8.39,
     'O': 8.73,
@@ -39,6 +41,15 @@ abundances_sun = {
     'Ti': 4.93,
     'Fe': 7.46,
     }
+
+# to make the header of the combined data CSV file
+## combined_data_keys = ['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys + ['C_Mg','O_Mg','Si_Mg','Ca_Mg','Ti_Mg','Fe_Mg'] + ['Exo']
+combined_data_keys = (['star_name', 'planet_letters'] + hypatia_data_keys + exo_data_keys +
+                      molar_ratio_keys + ['Exo'])
+
+# Planetary property cutoff, mass for giant planets, radius for small planets
+# cutoff_mass_j = 0.095
+cutoff_radius_e = 3.5
 
 class NoPlanet:
     def __init__(self):
@@ -53,7 +64,7 @@ class NoPlanet:
             self.exo_key = 'nan'
 
 # Calculate the molar ratio for each record
-def molar_ratio(hypatia_data_dict,planet_data_dict, element, abundances_sun):
+def molar_ratio(hypatia_data_dict, planet_data_dict, element, abundances_sun):
     for key in abundances_sun:
         if (key == element):
             continue
@@ -111,7 +122,11 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                 for exo_key in exo_data_keys
             }
 
+            # Calculate Molar Ratios
             molar_ratio(hypatia_data_dict, planet_data_dict, 'Mg', abundances_sun)
+            molar_ratio(hypatia_data_dict, planet_data_dict, 'Si', abundances_sun)
+            molar_ratio(hypatia_data_dict, planet_data_dict, 'O', abundances_sun)
+
             planet_data_dict['Exo'] = 0
             planet_letter = str()            
             replace_blank_strings()
@@ -151,7 +166,12 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                         exo_key: (exo_true.__getattribute__(exo_key) if exo_key in exo_true.planet_params else "")
                         for exo_key in exo_data_keys
                         }
+
+                    # Calculate Molar Ratios
                     molar_ratio(hypatia_data_dict, planet_data_dict, 'Mg', abundances_sun)
+                    molar_ratio(hypatia_data_dict, planet_data_dict, 'Si', abundances_sun)
+                    molar_ratio(hypatia_data_dict, planet_data_dict, 'O', abundances_sun)
+                    
                     planet_data_dict['Exo'] = 1
                     # The error is in planet_data_dict since I'm writing out the final planet in the dictionary
                     replace_blank_strings()
@@ -180,7 +200,12 @@ with open(os.path.join(base_dir, "main.csv"), "w") as combined_data_file:
                         exo_key: (exo_planet.__getattribute__(exo_key) if exo_key in exo_planet.planet_params else "")
                         for exo_key in exo_data_keys
                     }
+
+                    # Calculate Molar Ratios
                     molar_ratio(hypatia_data_dict, planet_data_dict, 'Mg', abundances_sun)
+                    molar_ratio(hypatia_data_dict, planet_data_dict, 'Si', abundances_sun)
+                    molar_ratio(hypatia_data_dict, planet_data_dict, 'O', abundances_sun)
+                    
                     planet_data_dict['Exo'] = 1
                     replace_blank_strings()
                     combine_data(star_name, planet_letter, hypatia_data_dict, planet_data_dict)

@@ -61,7 +61,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #--------------------------------Running the Numbers---------------------------------
     #Utilize planet_probabilities_all.csv for each run.
     count = 0
-    hyp = ClassyReader("main_copy.csv",delimiter=",")
+    hyp = ClassyReader("main.csv",delimiter=",")
     for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
 ##        print(file)
 
@@ -140,6 +140,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                     ybinl = 0
                     ybinr = 0.010
                 elif (n == "Ca_Mg"):
+                    print(predFe)
                     xbinl = -0.1
                     xbinr = 1.5
                     ybinl = 0
@@ -199,8 +200,8 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             cleanexoE = [x for x in element_dict[n]['exo'] if str(x) != 'nan']
             cleanotherE = [x for x in element_dict[n]['other'] if str(x) != 'nan']
         
-            print("raw kstest", ks_2samp(element_dict[n]["pred"], element_dict[n]["exo"])[1])
-            print("cleankstest", ks_2samp(cleanpredE, cleanexoE)[1])
+##            print("raw kstest", ks_2samp(element_dict[n]["pred"], element_dict[n]["exo"])[1])
+##            print("cleankstest", ks_2samp(cleanpredE, cleanexoE)[1])
         
             # Same as above to calculate the max bin == 1.
             histOthE = np.histogram(cleanotherE,bins=binsy)
@@ -209,6 +210,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                 normOthE.append(float(num)/float(max(histOthE[0])))
         
             histExoE = np.histogram(cleanexoE,bins=binsy)
+##            print(histExoE)
             normExoE = []
             for num in histExoE[0]:
                 normExoE.append(float(num)/float(max(histExoE[0])))
@@ -268,7 +270,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             if plotMolar:
                 axScatter.set_ylabel(n.replace("_", "/"),fontsize=15)
                 axScatter.set_xlabel("Fe/Mg",fontsize=15)
-                plt.show()
+##                plt.show()
         
 ##            # Adapt the labeling based on what's being plotted.
 ##            axScatter.set_xlabel("[Fe/H]", fontsize=15)
@@ -310,4 +312,4 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 ##        count+=1
 ##    print(count)
 
-hyp_plot_parameters("set8", False, False)
+hyp_plot_parameters("set8", False, True)
