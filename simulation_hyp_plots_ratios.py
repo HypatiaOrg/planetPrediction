@@ -19,6 +19,8 @@ from glob import glob
 plt.style.use('ggplot')  #'default'
 plt.rcParams['axes.facecolor']='whitesmoke'
 plotMolar = True
+axis_plot_against = "Fe_O"
+run_set = "Experiment 3/set10-null"
 
 #---------------- Definition---------------------------------------------
 
@@ -50,10 +52,14 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
     elif set_name=="set6":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
-    elif set_name=="set7":
+    elif set_name=="Experiment 3/set7-null":
         elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'Ca_Mg']
-    elif set_name=="set8":
+    elif set_name=="Experiment 3/set8-null":
         elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'C_Mg', 'Ca_Mg', 'O_Mg']
+    elif set_name=="Experiment 3/set9-null":
+        elements = ['Mg_Si', 'Ti_Si', 'Fe_Si', 'Ca_Si']
+    elif set_name=="Experiment 3/set10-null":
+        elements = ['Si_O', 'Ti_O', 'Fe_O', 'Ca_O', 'Mg_O', 'C_O']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
@@ -62,6 +68,8 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #Utilize planet_probabilities_all.csv for each run.
     count = 0
     hyp = ClassyReader("main.csv",delimiter=",")
+    plotAgainst = hyp.Fe_O
+    
     for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
 ##        print(file)
 
@@ -69,6 +77,8 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 
         element_dict = {}
         for zz, n in enumerate(elements):
+##            if (n=="C_Mg" or n=="O_Mg"):
+##                continue
 ##            print(n)
             element_dict[n] = {"pred": [], "exo": [], "other": []}
 
@@ -91,7 +101,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 
             for zz, star in enumerate(hyp.star_name):
                 if star in predicted.star_name:
-                    predFe.append(hyp.Fe_Mg[zz])
+                    predFe.append(plotAgainst[zz])
                     if plotMolar:
                         element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz])                        
 ##                    predFe.append(hyp.Fe[zz])
@@ -102,7 +112,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 ##                        # vtars()[temp1].append(hyp[n][zz])
 ##                        element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz])
                 elif hyp.Exo[zz]==1:
-                    exoFe.append(hyp.Fe_Mg[zz])
+                    exoFe.append(plotAgainst[zz])
                     if plotMolar:
                         element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz])
 ##                    exoFe.append(hyp.Fe[zz])
@@ -113,7 +123,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 ##                        # vars()[temp2].append(hyp[n][zz])
 ##                        element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz])
                 else:
-                    otherFe.append(hyp.Fe_Mg[zz])
+                    otherFe.append(plotAgainst[zz])
                     if plotMolar:
                         element_dict[n]["other"].append(hyp.__getattribute__(n)[zz])
 ##                    otherFe.append(hyp.Fe[zz])
@@ -140,7 +150,6 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                     ybinl = 0
                     ybinr = 0.010
                 elif (n == "Ca_Mg"):
-                    print(predFe)
                     xbinl = -0.1
                     xbinr = 1.5
                     ybinl = 0
@@ -165,7 +174,6 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             binwidth = 0.1
             binsx = np.arange(xbinl, xbinr + binwidth, binwidth)
             binsy = np.arange(ybinl, ybinr + binwidth, binwidth)
-        
         
             # Python's histogram has no way to normalize the maximum bin to == 1, so
             # first you have to calculate the histogram, take the first element of
@@ -199,18 +207,19 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             cleanpredE = [x for x in element_dict[n]['pred'] if str(x) != 'nan']
             cleanexoE = [x for x in element_dict[n]['exo'] if str(x) != 'nan']
             cleanotherE = [x for x in element_dict[n]['other'] if str(x) != 'nan']
+
+
         
 ##            print("raw kstest", ks_2samp(element_dict[n]["pred"], element_dict[n]["exo"])[1])
 ##            print("cleankstest", ks_2samp(cleanpredE, cleanexoE)[1])
         
             # Same as above to calculate the max bin == 1.
-            histOthE = np.histogram(cleanotherE,bins=binsy)
+            histOthE = np.histogram(cleanotherE,bins=binsy)         
             normOthE = []
             for num in histOthE[0]:
                 normOthE.append(float(num)/float(max(histOthE[0])))
         
             histExoE = np.histogram(cleanexoE,bins=binsy)
-##            print(histExoE)
             normExoE = []
             for num in histExoE[0]:
                 normExoE.append(float(num)/float(max(histExoE[0])))
@@ -269,7 +278,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 
             if plotMolar:
                 axScatter.set_ylabel(n.replace("_", "/"),fontsize=15)
-                axScatter.set_xlabel("Fe/Mg",fontsize=15)
+                axScatter.set_xlabel(axis_plot_against.replace("_","/"),fontsize=15)
 ##                plt.show()
         
 ##            # Adapt the labeling based on what's being plotted.
@@ -312,4 +321,4 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
 ##        count+=1
 ##    print(count)
 
-hyp_plot_parameters("set8", False, True)
+hyp_plot_parameters(run_set, False, True)

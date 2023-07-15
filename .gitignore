@@ -14,7 +14,6 @@ csv
 *Experiment 3/
 *More Old Stuff/
 *Molar Plots/
-*test.py
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml

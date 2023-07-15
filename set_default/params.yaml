@@ -1,7 +1,7 @@
 cv_folds:              5
 early_stopping_rounds: 50
-N_iterations:          20
-N_samples:             20
+N_iterations:          3000
+N_samples:             200
 upper_planet_radius:   2.0
 lower_planet_radius:   1.0
 
