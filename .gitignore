@@ -12,8 +12,13 @@ csv
 *Experiment 1/
 *Experiment 2/
 *Experiment 3/
+*Experiment 1 - Molar Ratios/
+*Experiment 2 - Molar Ratios/
+*Experiment 3 - Molar Ratios/
+*Feature Importance Plots/
 *More Old Stuff/
 *Molar Plots/
+*Experiments
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml
