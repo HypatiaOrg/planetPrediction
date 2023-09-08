@@ -4,23 +4,25 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from planetpred.table_read import ClassyReader
 import sys
+from datetime import datetime
 
-set_name_one = 'set1-drop'
-set_name_two = 'set2-drop'
+set_name_one = 'setm12-drop'
+set_name_two = 'setm13-drop'
 experiment_name = 'Experiment 1'
-ensemble_name_one = 'Ensemble 1'
-ensemble_name_two = 'Ensemble 2'
+ensemble_name_one = 'Ensemble 12'
+ensemble_name_two = 'Ensemble 13'
 
 # Define the Path Variables
 path_one = os.path.dirname(os.path.realpath(__file__)) + '\\' + experiment_name + '\\' + set_name_one + '\\figures\\'
 path_two = os.path.dirname(os.path.realpath(__file__)) + '\\' + experiment_name + '\\' + set_name_two + '\\figures\\'
+output_dir = os.path.dirname(os.path.realpath(__file__)) + '\\Comparisons\\'
 
 # Get the files to compare
 file_one = path_one+'planet_probabilitiesFull-'+set_name_one+'.csv'
 file_two = path_two+'planet_probabilitiesFull-'+set_name_two+'.csv'
 
-elements_one = ['Mg', 'Si', 'Ti']
-elements_two = ['Mg', 'Si', 'Ti', 'Fe']
+elements_one = ['Y', 'Ca', 'Cr']
+elements_two = ['Y', 'Ca', 'Cr', 'Fe']
 
 plotXFe = True
 

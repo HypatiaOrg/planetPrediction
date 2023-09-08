@@ -13,7 +13,7 @@ from glob import glob
 
 # Define file locations
 experiment = 'Experiment 1'
-set_name = 'set6-drop'
+set_name = 'setm13-drop'
 work_dir = os.path.dirname(os.path.realpath(__file__))
 path = os.path.dirname(os.path.realpath(__file__)) + '\\' + experiment + '\\' + set_name + '\\figures\\'
 

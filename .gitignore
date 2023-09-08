@@ -20,6 +20,9 @@ csv
 *More Old Stuff/
 *Molar Plots/
 *Experiments
+*Venn Diagrams/
+*Manual Plotting Scripts/
+*Comparisons/
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml
