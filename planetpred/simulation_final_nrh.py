@@ -42,6 +42,7 @@ def set_parameters(set_name, golden_set, input_file):
     
     
     golden = str_to_bool(golden_set)
+##    print(golden)
     
     #-------------------------------------------------------------------------
     
@@ -63,6 +64,7 @@ def set_parameters(set_name, golden_set, input_file):
     
     # Make a golden set if True. Then select 10 random confirmed exoplanet host stars as the golden.
     if golden:
+##        print("I'm GOLDEN!")
         df2 = df.copy()
         df2.loc[df2[(df2['Exo']==1) & ((df2['pl_rade']>parameters['lower_planet_radius']) & (df2['pl_rade']<parameters['upper_planet_radius']))].sample(10, random_state=np.random.RandomState()).index,'Exo'] = 0
         yy = df2.loc[df2['Exo'] == 0].index
@@ -238,12 +240,12 @@ def set_parameters(set_name, golden_set, input_file):
         changeddf = pd.DataFrame([]) #make empty dataframe
         for star in changedhips:  #loop over the 10 known planets hosts (defined at top)
 ##            changeddf = changeddf.append(planets2.loc[planets2.index==star])
-            pd.concat([changeddf,planets2.loc[planets2.index==star]])
+            changeddf = pd.concat([changeddf,planets2.loc[planets2.index==star]])
             if planets2.loc[planets2.index==star].empty: #catch for when a known planet host was cut (bc of abunds)
                 temp = pd.Series([nan,nan,nan], index=['Sampled', 'Predicted', 'Prob'])
                 temp.name = star
 ##                changeddf = changeddf.append(temp) #append blank file (with star name as index)
-                pd.concat([changeddf,temp])
+                changeddf = pd.concat([changeddf,temp])
         #Save golden set as a separate file with the date and time as a tag
         filename ='{0}/figures/goldenSetProbabilities'+str(datetime.today().strftime('-%h%d-%H%M'))+'.csv'
         changeddf.to_csv(filename.format(set_number), na_rep=" ")

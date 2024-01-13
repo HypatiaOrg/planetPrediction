@@ -37,32 +37,20 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #------------------------Input Changes-----------------------------------------
     
     # If folder name is set(number), it looks for the following elements. Copy the ones I want.
-    if (set_name=="set1"):
+    if (set_name=="set1-test"):
         elements = ['Mg', 'Si', 'Ti']
     elif set_name=="set2":
         elements = ['Mg', 'Si', 'Ti', 'Fe']
     elif (set_name=="set3"):
         elements = ['C', 'O', 'Mg', 'Si', 'Ti']
-    elif set_name=="set4":
+    elif set_name=="set4-a":
         elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
-    elif set_name=="set5":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
-    elif set_name=="set6":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
-    elif set_name=="set7":
-        elements = ['Si/Mg', 'Ti/Mg', 'Fe/Mg', 'Ca/Mg']
-    elif set_name=="set8":
-        elements = ['Si/Mg', 'Ti/Mg', 'Fe/Mg', 'C/Mg', 'Ca/Mg', 'O/Mg']
-    elif set_name=="set9-drop":
-        elements = ['Mg_Si', 'Ti_Si', 'Fe_Si', 'Ca_Si', 'O_Si', 'C_Si']
-    elif set_name=="set12":
-        elements = ['Y', 'Ca', 'Cr']
-    elif set_name=="set13":
-        elements = ['Y', 'Ca', 'Cr', 'Fe']
-    elif set_name=="set14":
-        elements = ['Y', 'Ca', 'Cr', 'Mn', 'Al', 'Ni']
-    elif set_name=="set15":
-        elements = ['Y', 'Ca', 'Cr', 'Mn', 'Al', 'Ni', 'Fe']
+    elif set_name=="Experiment 3\\set5-super":
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
+    elif set_name=="Experiment 3\\set6-super":
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
+    elif set_name=="Experiment 3\\set8-super":
+        elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'C_Mg', 'Ca_Mg', 'O_Mg']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
@@ -83,8 +71,9 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #Utilize planet_probabilities_all.csv for each run.
     count = 0
     hyp = ClassyReader("main.csv",delimiter=",")
-    for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
-        print(file)
+##    for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
+    for file in glob('C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\Experiment 3\\set5-super\\figures\\planet_probabilities-*.csv'):
+        #print(file)
 
         predicted = ClassyReader(file,delimiter=",")
 
@@ -110,7 +99,12 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             exoFe = []
             otherFe = []
 
+            # Check if a star in the main.csv file is also in the predicted file. If it is
+            # append the Fe metallicity values to the specified Fe list. If we are plotting [X/Fe]
+            # calculate the appropriate difference to the element we want and append that to the
+            # element dictionary. Otherwise utilize the default metallicity for the element we want.
             for zz, star in enumerate(hyp.star_name):
+                #print(star)
                 if star in predicted.star_name:
                     predFe.append(hyp.Fe[zz])
                     if plotXFe:
@@ -119,6 +113,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                     else:
                         # vtars()[temp1].append(hyp[n][zz])
                         element_dict[n]["pred"].append(hyp.__getattribute__(n)[zz])
+                # If the star wasn't predicted on but has an exoplanet detected.
                 elif hyp.Exo[zz]==1:
                     exoFe.append(hyp.Fe[zz])
                     if plotXFe:
@@ -127,6 +122,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                     else:
                         # vars()[temp2].append(hyp[n][zz])
                         element_dict[n]["exo"].append(hyp.__getattribute__(n)[zz])
+                # If the star wasn't predicted on and has no exoplanet detected.
                 else:
                     otherFe.append(hyp.Fe[zz])
                     if plotXFe:
@@ -222,7 +218,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             #Make the scatter plot.
             axScatter.scatter(otherFe, element_dict[n]["other"], s=60,facecolor="None",edgecolor="salmon", label='Stars Less Likely to Host ($<$90$\%$)')
             axScatter.scatter(exoFe,element_dict[n]["exo"],s=60,facecolor="None",edgecolor="navy", label='Known Planet Hosts')
-            axScatter.scatter(predFe,element_dict[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",edgecolor="#1b9e77", label='Predicted Planet Hosts ($>$90$\%$)')
+            axScatter.scatter(predFe,element_dict[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",edgecolor="#1b9e77", label='Predicted Planet Hosts ($≥$90$\%$)')
             # Note that Predicted Planet is \ge but LaTeX is needed
 
             # Set the limits on the scatter plot.
@@ -275,6 +271,6 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                 plt.show()
 
         count+=1
-    print(count)
+##    print(count)
 
-##hyp_plot_parameters("set3", True, True)
+hyp_plot_parameters("Experiment 3\\set8-super", False, True)

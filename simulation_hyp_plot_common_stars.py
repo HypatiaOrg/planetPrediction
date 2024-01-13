@@ -7,10 +7,10 @@ import sys
 from datetime import datetime
 
 set_name_one = 'setm12-drop'
-set_name_two = 'setm13-drop'
+set_name_two = 'setm16-drop'
 experiment_name = 'Experiment 1'
 ensemble_name_one = 'Ensemble 12'
-ensemble_name_two = 'Ensemble 13'
+ensemble_name_two = 'Ensemble 16'
 
 # Define the Path Variables
 path_one = os.path.dirname(os.path.realpath(__file__)) + '\\' + experiment_name + '\\' + set_name_one + '\\figures\\'
@@ -21,10 +21,10 @@ output_dir = os.path.dirname(os.path.realpath(__file__)) + '\\Comparisons\\'
 file_one = path_one+'planet_probabilitiesFull-'+set_name_one+'.csv'
 file_two = path_two+'planet_probabilitiesFull-'+set_name_two+'.csv'
 
-elements_one = ['Y', 'Ca', 'Cr']
-elements_two = ['Y', 'Ca', 'Cr', 'Fe']
+elements_one = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
+elements_two = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
 
-plotXFe = True
+plotXFe = False
 
 hyp = ClassyReader("main.csv",delimiter=",")
 
@@ -61,9 +61,6 @@ df = df.dropna()
 # Make the star name column again and reset the indexes
 df = df.rename_axis('star_name').reset_index()
 
-# Third check used for plotting stars with commonality
-predicted_three = df
-
 for zz, n in enumerate(elements_one):
     element_dict_one[n] = {"pred":[]}
     element_dict_two[n] = {"pred":[]}
@@ -98,11 +95,11 @@ for zz, n in enumerate(elements_one):
     rect_scatter = [left, bottom, width, height]
     axScatter = plt.axes(rect_scatter)
     axScatter.scatter(predFe_one,element_dict_one[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",
-                      edgecolor="red", label= ensemble_name_one + ' (>90%)')
+                      edgecolor="red", label= ensemble_name_one + ' (≥90%)')
     axScatter.scatter(predFe_two,element_dict_two[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",
-                      edgecolor="blue", label= ensemble_name_two + ' (>90%)')
+                      edgecolor="blue", label= ensemble_name_two + ' (≥90%)')
     axScatter.scatter(predFe_three,element_dict_three[n]["pred"],s=30,marker="D",linewidths=0.5,facecolor="None",
-                      edgecolor="purple", label= ensemble_name_one + ' + ' + ensemble_name_two + ' (>90%)')
+                      edgecolor="purple", label= ensemble_name_one + ' + ' + ensemble_name_two + ' (≥90%)')
     axScatter.set_facecolor('darkgrey')
     plt.title('Predicted Planet Hosts')
     

@@ -13,7 +13,7 @@ from glob import glob
 
 # Define file locations
 experiment = 'Experiment 1'
-set_name = 'setm13-drop'
+set_name = 'setm15-drop'
 work_dir = os.path.dirname(os.path.realpath(__file__))
 path = os.path.dirname(os.path.realpath(__file__)) + '\\' + experiment + '\\' + set_name + '\\figures\\'
 
@@ -31,13 +31,20 @@ for file in glob(path+"/planet_probabilitiesAll-*.csv"):
 
 # Determine the total probability for each star
 df['Prob'] = df['Predicted']/df['Sampled']
+#df = df.rename(columns={'Prob': 'Prob'+ ' ' + set_name})
 
 # Define the Star Names as the indexes of the Data Frame
 df = df.set_index('star_name')
 
-# Drop null value rows
+#print(df)
+
+#Drop null value rows
 df = df.dropna()
 df = df[df.Prob >= 0.9]
 
+#df = df.rename(columns={'Prob': 'Prob'+ ' ' + set_name})
+
+#print(df)
+
 # Output the file
-df.to_csv(path+'planet_probabilitiesFull'+'-'+set_name+'.csv')
+df.to_csv(path+'planet_probabilitiesTotal'+'-'+set_name+'.csv')

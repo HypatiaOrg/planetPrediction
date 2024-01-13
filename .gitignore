@@ -23,6 +23,14 @@ csv
 *Venn Diagrams/
 *Manual Plotting Scripts/
 *Comparisons/
+*Golden Set Files/
+*Current/
+*Abundance Shared/
+*Abundance Molar/
+*Overlaps/
+*Total Probabilities/
+*Meeting-Sept182023/
+*Giant Planets/
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml

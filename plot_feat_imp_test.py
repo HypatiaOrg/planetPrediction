@@ -7,7 +7,7 @@ from xgboost import XGBRegressor
 
 ## ------Import the Data-----------------------------------------
 molar = True
-set_name = "Experiment 3/setm11-null"
+set_name = "Experiment 3/setm11-super"
 stream = open('{0}/params.yaml'.format(set_name), 'r')
 parameters = yaml.load(stream, Loader=yaml.FullLoader)
 features = parameters['features']
@@ -191,12 +191,16 @@ def switch(set_name):
                     'O/Mg': '',
                     }
     elif set_name.__contains__('Experiment 1/set9'):
-        colors = {'Mg/Si': variation_one,
+        colors = {'O/Si': no_variation,
+                  'C/Si': no_variation,
+                  'Mg/Si': no_variation,
                   'Ti/Si': no_variation,
                   'Fe/Si': no_variation,
-                  'Ca/Si': variation_one,
+                  'Ca/Si': no_variation,
                   }
-        patterns = {'Mg/Si': '',
+        patterns = {'O/Si': '',
+                    'C/Si': '',
+                    'Mg/Si': '',
                     'Ti/Si': '',
                     'Fe/Si': '',
                     'Ca/Si': '',
@@ -351,19 +355,23 @@ def switch(set_name):
                     'O/Mg': '',
                     }
     elif set_name.__contains__('Experiment 2/set9'):
-        colors = {'Mg/Si': variation_two,
+        colors = {'O/Si': no_variation,
+                  'C/Si': no_variation,
+                  'Mg/Si': variation_one,
                   'Ti/Si': variation_one,
-                  'Fe/Si': variation_one,
-                  'Ca/Si': variation_two,
+                  'Fe/Si': no_variation,
+                  'Ca/Si': no_variation,
                   }
-        patterns = {'Mg/Si': '',
+        patterns = {'O/Si': '',
+                    'C/Si': '',
+                    'Mg/Si': '',
                     'Ti/Si': '',
                     'Fe/Si': '',
                     'Ca/Si': '',
                     }
     elif set_name.__contains__('Experiment 2/setm10'):
-        colors = {'C/O': no_variation,
-                  'Si/O': no_variation,
+        colors = {'C/O': variation_one,
+                  'Si/O': variation_one,
                   'Ti/O': no_variation,
                   'Fe/O': no_variation,
                   'Ca/O': no_variation,
@@ -377,9 +385,9 @@ def switch(set_name):
                     'Mg/O': '',
                     }
     elif set_name.__contains__('Experiment 2/setm11'):
-        colors = {'Fe': variation_one,
+        colors = {'Fe': no_variation,
                   'Mg': no_variation,
-                  'Na': variation_one,
+                  'Na': no_variation,
                   'Fe/Mg': no_variation,
                   'Fe/Si': no_variation,
                   'C/Mg': no_variation,
@@ -498,6 +506,21 @@ def switch(set_name):
                     'C/Mg': '',
                     'O/Mg': '',
                     }
+    elif set_name.__contains__('Experiment 3/set9'):
+        colors = {'O/Si': variation_two,
+                  'C/Si': no_variation,
+                  'Mg/Si': no_variation,
+                  'Ti/Si': variation_two,
+                  'Fe/Si': variation_one,
+                  'Ca/Si': variation_one,
+                  }
+        patterns = {'O/Si': '//',
+                    'C/Si': '',
+                    'Mg/Si': '',
+                    'Ti/Si': '',
+                    'Fe/Si': '',
+                    'Ca/Si': '//',
+                    }
     elif set_name.__contains__('Experiment 3/setm10'):
         colors = {'C/O': no_variation,
                   'Si/O': no_variation,
@@ -515,11 +538,11 @@ def switch(set_name):
                     }
     elif set_name.__contains__('Experiment 3/setm11'):
         colors = {'Fe': variation_one,
-                  'Mg': variation_three,
+                  'Mg': no_variation,
                   'Na': variation_one,
                   'Fe/Mg': no_variation,
                   'Fe/Si': variation_two,
-                  'C/Mg': variation_three,
+                  'C/Mg': no_variation,
                   'Mg/O': variation_two
                   }
         patterns = {'Fe': '',
@@ -571,7 +594,6 @@ if (set_name.__contains__('Experiment 1/set1') or
     set_name.__contains__('Experiment 1/set2') or
     set_name.__contains__('Experiment 1/set4') or
     set_name.__contains__('Experiment 1/setm11') or
-    set_name.__contains__('Experiment 2/setm10') or
     set_name.__contains__('Experiment 3/setm10')):
     ax.text(x=1.0,y=-0.4,s='Blue: No Variation')
 
@@ -584,6 +606,7 @@ if (set_name.__contains__('Experiment 1/set3') or
     set_name.__contains__('Experiment 2/set7') or
     set_name.__contains__('Experiment 2/set8') or
     set_name.__contains__('Experiment 2/set9') or
+    set_name.__contains__('Experiment 2/setm10') or
     set_name.__contains__('Experiment 2/setm11') or
     set_name.__contains__('Experiment 2/set3') or
     set_name.__contains__('Experiment 2/set4') or

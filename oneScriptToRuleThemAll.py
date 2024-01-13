@@ -15,7 +15,7 @@ input_file_name = File that has abundances and whether a star is an exoplanet ho
 '''
 
 #file_name = "simulation_final_nrh.py"
-setname = "set13"
+setname = "set5-super"
 molar_ratio = False
 goldenYN = "True"
 XFeYN = "True"
@@ -26,7 +26,6 @@ for i in range(25): #Unique standalone trees that have nothing to do with each o
     set_parameters(set_name=setname, golden_set=goldenYN, input_file=input_file_name)
     plot_parameters(set_name=setname)
 ##    hyp_plot_parameters(set_name=setname, plotXFe=XFeYN, saveplot=plotYN)
-
 # Plot the predicted planet hosts after the main loop runs.
 # While molar ratio plotting is figured out, plot any ensemble that does not
 # use molar ratios otherwise ignore.
@@ -34,7 +33,4 @@ if molar_ratio:
     print("Skipping hyp_plot_parameters.")
 else:
     hyp_plot_parameters(set_name=setname, plotXFe=XFeYN, saveplot=plotYN)
-
 print("Save the last planet_probabilities lists as _big and run simulation_hyp_plots")
-
-
