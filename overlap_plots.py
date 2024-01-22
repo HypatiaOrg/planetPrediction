@@ -177,13 +177,13 @@ def ensemble_comp(df1,df2,check):
     return
 
 def overplot_all():
-    plot_values = ["C_O"]
+    plot_values = ["Fe_Si"]
     hyp = ClassyReader("main.csv",delimiter=",")
     plotAgainst = hyp.Fe
     dict_one = {}
     dict_two = {}
     df1 = pd.read_csv("main.csv",usecols=["star_name"])
-    df2 = pd.read_csv("big_overlap_experiment2.csv",usecols=["star_name"])
+    df2 = pd.read_csv("big_overlap_experiment3.csv",usecols=["star_name"])
 
     for zz,n in enumerate(plot_values):
         dict_one[n]={"pred":[]}
@@ -280,7 +280,7 @@ def overplot_all():
         axHistx.set_xlim(axScatter.get_xlim())
         axHisty.set_ylim(axScatter.get_ylim())
         
-        axHistx.set_title('Experiment 2',fontsize=10)
+        axHistx.set_title('Experiment 3',fontsize=10)
 ##        if n == 'Na':
 ##            plt.ylim(-1.5,1.5)
 ##            plt.xlim(-1,1)

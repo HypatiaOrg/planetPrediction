@@ -31,6 +31,8 @@ csv
 *Total Probabilities/
 *Meeting-Sept182023/
 *Giant Planets/
+*Bias Plots/
+*Data-sets/
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml
