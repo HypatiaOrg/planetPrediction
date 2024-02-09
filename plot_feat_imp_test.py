@@ -7,7 +7,7 @@ from xgboost import XGBRegressor
 
 ## ------Import the Data-----------------------------------------
 molar = True
-set_name = "Experiment 3/setm11-super"
+set_name = "Experiment 3/setm10-super"
 stream = open('{0}/params.yaml'.format(set_name), 'r')
 parameters = yaml.load(stream, Loader=yaml.FullLoader)
 features = parameters['features']
@@ -585,7 +585,7 @@ hbars = ax.barh(sa.index.values,
 plt.xlim(0,1.4)
 ax.set_xlabel('Weighted Feature Importance Score')
 ax.set_ylabel('Feature')
-ax.set_title('Feature Importance')
+#ax.set_title('Feature Importance')
 
 # Text Legend for plot
 

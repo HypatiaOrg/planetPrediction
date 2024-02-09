@@ -177,7 +177,7 @@ def ensemble_comp(df1,df2,check):
     return
 
 def overplot_all():
-    plot_values = ["Fe_Si"]
+    plot_values = ["Mg_Si"]
     hyp = ClassyReader("main.csv",delimiter=",")
     plotAgainst = hyp.Fe
     dict_one = {}
@@ -280,7 +280,7 @@ def overplot_all():
         axHistx.set_xlim(axScatter.get_xlim())
         axHisty.set_ylim(axScatter.get_ylim())
         
-        axHistx.set_title('Experiment 3',fontsize=10)
+##        axHistx.set_title('Experiment 3',fontsize=10)
 ##        if n == 'Na':
 ##            plt.ylim(-1.5,1.5)
 ##            plt.xlim(-1,1)
@@ -296,6 +296,8 @@ def overplot_all():
 ##        # If not [Fe/H] replace bottom line.
         axScatter.set_ylabel(n.replace("_","/"),fontsize=15)
         axScatter.set_xlabel("[Fe/H]",fontsize=15)
+        axHistx.set_ylabel("Relative Dist", fontsize=12)
+        axHisty.set_xlabel("Relative Dist", fontsize=12)
         axScatter.legend(loc='best',scatterpoints=1,fontsize=8)        
         plt.show()
 

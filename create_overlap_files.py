@@ -90,7 +90,7 @@ df3 = df3.set_index('star_name')
 
 # Iterate through every file in the ensemble
 count3 = 0
-for file in glob(path+"/planet_probabilitiese1*.csv"):
+for file in glob(path+"/planet_probabilitiese3*.csv"):
     # Open the file
     ensemble_run = pd.read_csv(file,usecols=['star_name', 'Sampled',
                                              'Predicted', 'Prob'])
@@ -106,7 +106,7 @@ for file in glob(path+"/planet_probabilitiese1*.csv"):
 # Check for non-null sets
 df3 = df3[(df3.Prob0 >= 0.9) & (df3.Prob1 >= 0.9) & (df3.Prob2 >= 0.9)
           & (df3.Prob3 >= 0.9) & (df3.Prob4 >= 0.9) & (df3.Prob5 >= 0.9)
-          & (df3.Prob6 >= 0.9) & (df3.Prob7 >= 0.9) & (df3.Prob8 >= 0.9)]
+          & (df3.Prob6 >= 0.9)]
 
 ### Check for null sets
 ##df3 = df3[(df3.Prob0 >= 0.9) & (df3.Prob1 >= 0.9) & (df3.Prob2 >= 0.9)
@@ -160,7 +160,7 @@ df3 = df3[(df3.Prob0 >= 0.9) & (df3.Prob1 >= 0.9) & (df3.Prob2 >= 0.9)
 ##    else:
 ##        axScatter.legend(loc='lower left',scatterpoints=1,fontsize=8)
 ##    plt.show()
-print(df3)
-input()
-#df3 = df3.set_index('star_name')
-#df3.to_csv("big_overlap_experiment_val.csv")
+##print(df3)
+##input()
+##df3 = df3.set_index('star_name')
+df3.to_csv("big_overlap_experiment3.csv")
