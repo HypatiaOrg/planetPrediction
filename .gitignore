@@ -33,6 +33,9 @@ csv
 *Giant Planets/
 *Bias Plots/
 *Data-sets/
+*Abundance Plots/
+*Feature Importance/
+*Old/
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml

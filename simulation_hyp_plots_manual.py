@@ -41,21 +41,19 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         elements = ['Mg', 'Si', 'Ti']
     elif set_name=="set2":
         elements = ['Mg', 'Si', 'Ti', 'Fe']
-    elif (set_name=="set3"):
+    elif (set_name=="Experiment 3\\set3-null"):
         elements = ['C', 'O', 'Mg', 'Si', 'Ti']
-    elif set_name=="set4-a":
+    elif set_name=="Experiment 3\\set4-null":
         elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
     elif set_name=="Experiment 3\\set5-super":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
-    elif set_name=="Experiment 3\\set6-super":
+    elif set_name=="Experiment 1\\set6-drop":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
     elif set_name=="Experiment 3\\set8-super":
         elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'C_Mg', 'Ca_Mg', 'O_Mg']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
-    
-    
     if plotXFe:
         xbinl = -1.0
         xbinr = 0.7
@@ -71,8 +69,8 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #Utilize planet_probabilities_all.csv for each run.
     count = 0
     hyp = ClassyReader("main.csv",delimiter=",")
-##    for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
-    for file in glob('C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\Experiment 3\\set5-super\\figures\\planet_probabilities-*.csv'):
+    for file in glob(set_name+"/figures/planet_probabilities-*.csv"):
+##    for file in glob('C:\\Users\\Locuan\\Documents\\GitHub\\planetPrediction\\Experiment 1\\set3-drop\\figures\\planet_probabilities-*.csv'):
         #print(file)
 
         predicted = ClassyReader(file,delimiter=",")
@@ -254,7 +252,7 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
             axHistx.set_ylabel("Relative Dist", fontsize=12)
             axHisty.set_xlabel("Relative Dist", fontsize=12)
         
-            if (n=="Mn" or not plotXFe):
+            if (n=="Mn" or n=="Na" or not plotXFe):
                 axScatter.legend(loc='upper left', scatterpoints=1,fontsize=8)
             else:
                 axScatter.legend(loc='lower left', scatterpoints=1,fontsize=8)
@@ -266,11 +264,11 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
                 if plotXFe:
                     plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"Fe"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf")) #note only pdf will show the cross-hatching
                 else:
-                    plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"H-"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf"))
+                    plt.savefig(os.path.join(full_plot_dir, "predicted"+n+"H"+str(datetime.today().strftime('-%h%d-%H%M%S'))+".pdf"))
             else:
                 plt.show()
 
         count+=1
 ##    print(count)
 
-hyp_plot_parameters("Experiment 3\\set8-super", False, True)
+hyp_plot_parameters("Experiment 1\\set6-drop", True, True)
