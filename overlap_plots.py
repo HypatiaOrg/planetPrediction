@@ -183,7 +183,7 @@ def overplot_all():
     dict_one = {}
     dict_two = {}
     df1 = pd.read_csv("main.csv",usecols=["star_name"])
-    df2 = pd.read_csv("big_overlap_experiment3.csv",usecols=["star_name"])
+    df2 = pd.read_csv("big_overlap_experiment1.csv",usecols=["star_name"])
 
     for zz,n in enumerate(plot_values):
         dict_one[n]={"pred":[]}

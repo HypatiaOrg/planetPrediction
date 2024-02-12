@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-overlap_filename = "big_overlap_experiment2.csv"
-output_filename = "ks_test_e2.csv"
+overlap_filename = "big_overlap_experiment3.csv"
+output_filename = "ks_test_e3_test.csv"
 
 # Open the files
 df_main = pd.read_csv("main - Copy.csv",usecols=["Fe","C","O","Na","Mg","Al","Si",
@@ -16,6 +16,8 @@ df_over = pd.read_csv(overlap_filename)
 # Define empty lists to store values later on...
 p_values = []
 features = []
+length_main = []
+length_over = []
 
 def ks_elements(features, p_values):
 
@@ -45,6 +47,8 @@ def ks_elements(features, p_values):
         # Append to relevant columns
         features.append(column)
         p_values.append(P)
+        length_main.append(len(ndarray_main_fe))
+        length_over.append(len(ndarray_over_fe))
 
 ##    # Create series for output:
 ##    df = pd.DataFrame({'Feature': features,
@@ -65,6 +69,8 @@ def ks_disk():
     print(f"{P=:.3g}, {D=:.3g}")
     features.append("disk")
     p_values.append(P)
+    length_main.append(len(ndarray_main_fe))
+    length_over.append(len(ndarray_over_fe))
     return
 
 def check_for_na():
@@ -76,7 +82,9 @@ def check_for_na():
 def output_file(features,p_values):
     # Create series for output:
     df = pd.DataFrame({'Feature': features,
-                       'p-value': p_values})
+                       'p-value': p_values,
+                       'Sample Main': length_main,
+                       'Sample Over': length_over})
 
     # Output
     df = df.set_index('Feature')
