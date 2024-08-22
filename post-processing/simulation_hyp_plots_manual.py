@@ -37,20 +37,30 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #------------------------Input Changes-----------------------------------------
     
     # If folder name is set(number), it looks for the following elements. Copy the ones I want.
-    if (set_name=="set1-test"):
-        elements = ['Mg', 'Si', 'Ti']
-    elif set_name=="set2":
-        elements = ['Mg', 'Si', 'Ti', 'Fe']
-    elif (set_name=="Experiment 3\\set3-null"):
+    if (set_name=="experiment-1\\set1"):
         elements = ['C', 'O', 'Mg', 'Si', 'Ti']
-    elif set_name=="Experiment 3\\set4-null":
+    elif set_name=="experiment-1\\set2":
         elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
-    elif set_name=="Experiment 3\\set5-super":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni']
-    elif set_name=="Experiment 1\\set6-drop":
-        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Sc', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Co', 'Ni', 'Fe']
-    elif set_name=="Experiment 3\\set8-super":
-        elements = ['Si_Mg', 'Ti_Mg', 'Fe_Mg', 'C_Mg', 'Ca_Mg', 'O_Mg']
+    elif (set_name=="experiment-1\\set3"):
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
+    elif set_name=="experiment-1\\set4":
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
+    elif (set_name=="experiment-2\\set1"):
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti']
+    elif set_name=="experiment-2\\set2":
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
+    elif (set_name=="experiment-2\\set3"):
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
+    elif set_name=="experiment-2\\set4":
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
+    elif (set_name=="experiment-3\\set1"):
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti']
+    elif set_name=="experiment-3\\set2":
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
+    elif (set_name=="experiment-3\\set3"):
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
+    elif set_name=="experiment-3\\set4":
+        elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
@@ -271,4 +281,4 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
         count+=1
 ##    print(count)
 
-hyp_plot_parameters("Experiment 1\\set6-drop", True, True)
+hyp_plot_parameters("experiment-3\\set4", True, True)

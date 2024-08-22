@@ -37,37 +37,19 @@ def hyp_plot_parameters(set_name, plotXFe, saveplot):
     #------------------------Input Changes-----------------------------------------
     
     # If folder name is set(number), it looks for the following elements. Copy the ones I want.
-    if (set_name=="set1"):
-        elements = ['Mg', 'Si', 'Ti']
-    elif set_name=="set2":
-        elements = ['Mg', 'Si', 'Ti', 'Fe']
-    elif (set_name=="set3"):
+    if (set_name=="experiment-2\\set1"):
         elements = ['C', 'O', 'Mg', 'Si', 'Ti']
-    elif set_name=="set4":
+    elif (set_name=="experiment-3\\set1"):
+        elements = ['C', 'O', 'Mg', 'Si', 'Ti']
+    elif (set_name=="experiment-3\\set2"):
         elements = ['C', 'O', 'Mg', 'Si', 'Ti', 'Fe']
-    elif set_name=="set5":
+    elif set_name=="experiment-3\\set3":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni']
-    elif set_name=="set6":
+    elif set_name=="experiment-3\\set4":
         elements = ['C', 'O', 'Na', 'Mg', 'Al', 'Si', 'Ca', 'Ti', 'V', 'Mn', 'Y', 'Cr', 'Ni', 'Fe']
-    elif set_name=="set7":
-        elements = ['Si/Mg', 'Ti/Mg', 'Fe/Mg', 'Ca/Mg']
-    elif set_name=="set8":
-        elements = ['Si/Mg', 'Ti/Mg', 'Fe/Mg', 'C/Mg', 'Ca/Mg', 'O/Mg']
-    elif set_name=="set9-drop":
-        elements = ['Mg_Si', 'Ti_Si', 'Fe_Si', 'Ca_Si', 'O_Si', 'C_Si']
-    elif set_name=="set12":
-        elements = ['Y', 'Ca', 'Cr']
-    elif set_name=="set13":
-        elements = ['Y', 'Ca', 'Cr', 'Fe']
-    elif set_name=="set14":
-        elements = ['Y', 'Ca', 'Cr', 'Mn', 'Al', 'Ni']
-    elif set_name=="set15":
-        elements = ['Y', 'Ca', 'Cr', 'Mn', 'Al', 'Ni', 'Fe']
     else:
         raise TypeError("The set name you listed doesn't have elements associated with it.")
 
-    
-    
     if plotXFe:
         xbinl = -1.0
         xbinr = 0.7
