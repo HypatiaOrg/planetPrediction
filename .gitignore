@@ -10,6 +10,7 @@
 *planetpred/Backup/
 *planetpred/backup_spripts/
 *planetpred/reference/backup/
+*ref/Backup Files
 
 # this file is made at run time from the data in ref/ref.py, edit that file not this one.
 ref/user.toml
